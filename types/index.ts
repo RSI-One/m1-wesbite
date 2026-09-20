@@ -23,6 +23,7 @@ export interface Article {
   category: string;
   date: string;
   accentColor: string;
+  thumbBg: string;
   readTime: string;
 }
 

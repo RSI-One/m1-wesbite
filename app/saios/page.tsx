@@ -63,10 +63,6 @@ export default function SaiosPage() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
 
         <div className="relative z-10 space-y-4">
-          <div className="inline-block text-[11px] font-mono tracking-[0.3em] uppercase text-zinc-500">
-            [ System Architecture Protocol ]
-          </div>
-
           <h1
             className={`text-7xl sm:text-9xl md:text-[10rem] font-extralight tracking-tighter text-white transition-all duration-700 ${
               glitchActive
@@ -92,21 +88,13 @@ export default function SaiosPage() {
       {/* 2. Core Functions Section (Motherboard Architecture) */}
       <section id="functions" className="relative py-28 px-6 md:px-12 max-w-6xl mx-auto w-full">
         <div className="text-center mb-16">
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-            Neural Avionics Core
-          </span>
-          <h2 className="text-3xl md:text-5xl font-light tracking-tight text-white mt-2">
+          <h2 className="text-3xl md:text-5xl font-light tracking-tight text-white">
             6 Core Functions
           </h2>
-          <p className="text-sm text-zinc-400 mt-2 font-mono">
-            Autonomous fleet intelligence engineered for zero-unscheduled-downtime.
-          </p>
         </div>
 
         {/* Semi-transparent Motherboard / Circuit Container */}
         <div className="relative rounded-3xl border border-zinc-800/80 bg-zinc-950/60 backdrop-blur-md p-8 md:p-14 overflow-hidden">
-          {/* Subtle Circuit Lines Watermark */}
-          <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
 
           {/* Center Brand Watermark on Desktop */}
           <div className="hidden lg:flex absolute inset-0 items-center justify-center pointer-events-none opacity-5">
@@ -119,15 +107,14 @@ export default function SaiosPage() {
             {CORE_FUNCTIONS.map((func) => (
               <div
                 key={func.num}
-                className="group p-6 rounded-2xl border border-zinc-800/80 bg-black/60 hover:border-zinc-600 transition-all duration-300"
+                className="p-6 rounded-2xl border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800/80 hover:border-zinc-700 transition-all duration-300"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-mono text-cyan-400/80 tracking-widest">
+                <div className="mb-4">
+                  <span className="inline-block text-[11px] font-mono tracking-widest text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded">
                     {func.num}
                   </span>
-                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-600 group-hover:bg-cyan-400 transition-colors" />
                 </div>
-                <h3 className="text-lg font-light text-white mb-2">{func.title}</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">{func.title}</h3>
                 <p className="text-xs text-zinc-400 leading-relaxed">{func.desc}</p>
               </div>
             ))}
@@ -142,15 +129,9 @@ export default function SaiosPage() {
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-48 h-48 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none" />
 
         <div className="text-center mb-16">
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-            System Taxonomy
-          </span>
-          <h2 className="text-3xl md:text-5xl font-light tracking-tight text-white mt-2">
+          <h2 className="text-3xl md:text-5xl font-light tracking-tight text-white">
             The SAIOS Nomenclature
           </h2>
-          <p className="text-xs font-mono text-zinc-500 mt-2">
-            Suspended airborne intelligence across commercial and private skies
-          </p>
         </div>
 
         <div className="space-y-4">
@@ -178,25 +159,20 @@ export default function SaiosPage() {
       {/* 4. Founder Message Section */}
       <section className="relative py-24 px-6 md:px-12 max-w-4xl mx-auto w-full border-t border-zinc-900">
         <div className="bg-zinc-950 border border-zinc-800 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          {/* Temporary Portrait Placeholder */}
-          <div className="shrink-0 w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-zinc-900 border border-zinc-700 flex flex-col items-center justify-center text-center p-4">
-            <span className="text-3xl mb-1">👤</span>
-            <span className="text-[10px] font-mono uppercase text-zinc-400 tracking-wider">
-              Daniyal
-            </span>
-            <span className="text-[9px] font-mono text-zinc-600">Founder & CEO</span>
-          </div>
+          {/* Founder Portrait */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/founder.jpg"
+            alt="Areez Rao – Founder & CEO"
+            className="shrink-0 w-36 h-36 sm:w-44 sm:h-44 rounded-2xl object-cover object-top border border-zinc-700"
+          />
 
-          {/* Founder Quote & Philosophy */}
           <div className="space-y-4 text-center md:text-left">
-            <span className="text-[11px] font-mono uppercase tracking-[0.25em] text-zinc-500">
-              Executive Message
-            </span>
             <blockquote className="text-lg sm:text-xl font-light italic text-zinc-200 leading-relaxed">
               &ldquo;Our vision with RSI Studio is to lead with a perfection in pixels philosophy, in the international and national market.&rdquo;
             </blockquote>
             <div>
-              <div className="text-sm font-semibold text-white">Daniyal</div>
+              <div className="text-sm font-semibold text-white">Areez Rao</div>
               <div className="text-xs text-zinc-400 font-mono">
                 Founder & Chief Executive Officer, RSI Studio / M1 Ecosystem
               </div>

@@ -17,10 +17,6 @@ export default function OneLiner() {
           <span className="text-zinc-500 font-light mx-3">+</span>
           <span className="text-zinc-200">Operating System</span>
         </p>
-
-        <p className="text-xs sm:text-sm font-mono uppercase tracking-[0.3em] text-zinc-500 max-w-xl mx-auto">
-          The unified digital foundation designed for the next era of global executive flight operations.
-        </p>
       </div>
     </section>
   );

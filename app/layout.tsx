@@ -31,6 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} bg-black text-[#f5efeb] antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col bg-black text-[#f5efeb] selection:bg-zinc-800 selection:text-white relative">
         <SmoothScroll>

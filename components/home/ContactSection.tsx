@@ -40,15 +40,9 @@ export default function ContactSection() {
       className="relative py-28 px-6 md:px-12 max-w-4xl mx-auto scroll-mt-20"
     >
       <div className="text-center mb-12">
-        <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-          Executive Inquiries
-        </span>
-        <h2 className="text-4xl md:text-5xl font-light tracking-tight text-white mt-2">
+        <h2 className="text-4xl md:text-5xl font-light tracking-tight text-white">
           Connect with M1
         </h2>
-        <p className="text-sm text-zinc-400 mt-2">
-          Direct dialogue with our executive advisory & technical leadership.
-        </p>
       </div>
 
       {/* White Form Card with Black Text and Silver Input Fields */}

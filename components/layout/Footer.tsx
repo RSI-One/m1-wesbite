@@ -10,21 +10,6 @@ import {
 export default function Footer() {
   return (
     <footer className="relative bg-black text-zinc-400 border-t border-zinc-900 pt-20 pb-12 overflow-hidden">
-      {/* Decorative Cloud & Aircraft Skyline Layer */}
-      <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none opacity-20 flex justify-between items-center overflow-hidden">
-        {/* Subtle cloud silhouette SVG */}
-        <div className="w-full flex justify-around items-center">
-          <span className="text-[10px] font-mono tracking-widest text-zinc-600">
-            ✈ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
-          </span>
-          <span className="text-[10px] font-mono tracking-widest text-zinc-700 hidden sm:inline">
-            ☁ ☁ ☁ ☁ ☁
-          </span>
-          <span className="text-[10px] font-mono tracking-widest text-zinc-600">
-            ─ ─ ─ ─ ─ ─ ─ ─ ─ ✈
-          </span>
-        </div>
-      </div>
 
       <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
@@ -44,9 +29,6 @@ export default function Footer() {
                 Aviation
               </span>
             </Link>
-            <p className="text-xs text-zinc-500 leading-relaxed">
-              Leading with a perfection in pixels philosophy to architect the next-generation digital ecosystem for business aviation.
-            </p>
             <div className="pt-2">
               <a
                 href={`mailto:${SUPPORT_EMAIL}`}

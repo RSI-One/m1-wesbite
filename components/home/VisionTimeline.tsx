@@ -27,17 +27,10 @@ export default function VisionTimeline() {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Header */}
       <div className="text-center mb-16">
-        <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-          Strategic Trajectory
-        </span>
-        <h2 className="text-4xl md:text-5xl font-light tracking-tight text-white mt-2">
+        <h2 className="text-4xl md:text-5xl font-light tracking-tight text-white">
           The 10-Year Vision
         </h2>
-        <p className="text-sm text-zinc-400 mt-2 font-mono">
-          Architecting an enduring sovereign ecosystem: 2016 — 2026
-        </p>
       </div>
 
       {/* Interactive Alternating Spotlight Display */}
@@ -86,7 +79,7 @@ export default function VisionTimeline() {
       </div>
 
       <div className="text-center mt-6 text-[11px] font-mono text-zinc-600">
-        Hover to pause auto-progression • {isPaused ? "Paused" : "Auto-advancing"}
+        {isPaused ? "Paused" : ""}
       </div>
     </section>
   );

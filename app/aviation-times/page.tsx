@@ -33,21 +33,13 @@ export default function AviationTimesPage() {
 
   return (
     <div className="w-full flex flex-col items-center pt-28 pb-20 px-6 md:px-12 max-w-5xl mx-auto">
-      {/* 1. Header & Live Search Bar */}
-      <div className="w-full text-center space-y-4 mb-16">
-        <div className="inline-block text-xs font-mono tracking-[0.25em] uppercase text-zinc-500">
-          Executive Editorial & Intelligence
-        </div>
 
+      {/* 1. Header & Search */}
+      <div className="w-full text-center space-y-4 mb-16">
         <h1 className="text-5xl sm:text-7xl font-extralight tracking-tight text-white">
           Aviation Times
         </h1>
 
-        <p className="text-sm sm:text-base font-light text-zinc-400 max-w-xl mx-auto leading-relaxed">
-          The Newsletter that covers the innovation and current affairs of business aviation.
-        </p>
-
-        {/* Live Search Input */}
         <div className="pt-6 max-w-xl mx-auto w-full">
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">
@@ -57,7 +49,7 @@ export default function AviationTimesPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search airframe intelligence, avionics, SAF, market reports..."
+              placeholder="Search articles..."
               className="w-full pl-11 pr-4 py-3.5 bg-zinc-950 border border-zinc-800 rounded-full text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors"
             />
             {searchQuery && (
@@ -73,13 +65,8 @@ export default function AviationTimesPage() {
         </div>
       </div>
 
-      {/* 2. Article Feed (1 Article Per Row, Image Left, Text Right, Distinct Colors) */}
+      {/* 2. Article Feed */}
       <section aria-label="Published Articles" className="w-full space-y-6 mb-20">
-        <div className="flex items-center justify-between text-xs font-mono text-zinc-500 pb-2 border-b border-zinc-900">
-          <span>Showing {filteredArticles.length} Editorial Entries</span>
-          <span>Sorted: Latest First</span>
-        </div>
-
         {filteredArticles.length === 0 ? (
           <div className="text-center py-16 border border-zinc-800/80 rounded-2xl bg-zinc-950">
             <p className="text-sm text-zinc-400">
@@ -90,7 +77,7 @@ export default function AviationTimesPage() {
               onClick={() => setSearchQuery("")}
               className="text-xs font-mono underline text-zinc-300 mt-2 hover:text-white"
             >
-              Reset Search Filter
+              Reset
             </button>
           </div>
         ) : (
@@ -99,20 +86,15 @@ export default function AviationTimesPage() {
               key={article.id}
               className={`p-6 sm:p-8 rounded-2xl border transition-all duration-300 flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-center ${article.accentColor}`}
             >
-              {/* Image Placeholder on Left */}
-              <div className="shrink-0 w-full md:w-56 h-36 rounded-xl bg-black/60 border border-white/10 flex flex-col items-center justify-center p-4 text-center">
-                <span className="text-2xl mb-1">✈</span>
-                <span className="text-[10px] font-mono uppercase text-zinc-400">
-                  {article.category}
-                </span>
-              </div>
+              {/* Solid color thumbnail — no icon */}
+              <div className={`shrink-0 w-full md:w-56 h-36 rounded-xl ${article.thumbBg}`} />
 
-              {/* Text / Summary on Right */}
+              {/* Text */}
               <div className="flex-1 space-y-2.5">
-                <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono">
-                  <span className="text-zinc-300">{article.date}</span>
+                <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono text-zinc-400">
+                  <span>{article.date}</span>
                   <span className="text-zinc-600">•</span>
-                  <span className="text-zinc-400">{article.readTime}</span>
+                  <span>{article.readTime}</span>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl font-light text-white tracking-tight">
@@ -122,32 +104,20 @@ export default function AviationTimesPage() {
                 <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
                   {article.summary}
                 </p>
-
-                <div className="pt-2">
-                  <span className="inline-flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white cursor-pointer transition-colors">
-                    Read Executive Dispatch →
-                  </span>
-                </div>
               </div>
             </article>
           ))
         )}
       </section>
 
-      {/* 3. Email Subscription Section */}
+      {/* 3. Subscribe */}
       <section
         aria-label="Newsletter Subscription"
         className="w-full bg-zinc-950 border border-zinc-800 rounded-3xl p-8 sm:p-12 mb-16 text-center"
       >
-        <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-          Stay Ahead of the Curve
-        </span>
-        <h3 className="text-2xl sm:text-3xl font-light text-white mt-1 mb-2">
+        <h3 className="text-2xl sm:text-3xl font-light text-white mb-6">
           Subscribe to Aviation Times
         </h3>
-        <p className="text-xs sm:text-sm text-zinc-400 max-w-md mx-auto mb-6">
-          Weekly curated intelligence on fleet telemetry, SAF developments, and pre-owned jet transaction trends.
-        </p>
 
         {subStatus === "success" ? (
           <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800 text-emerald-400 text-xs font-mono max-w-md mx-auto">
@@ -177,13 +147,10 @@ export default function AviationTimesPage() {
         )}
       </section>
 
-      {/* 4. Follow on LinkedIn CTA & Direct Contact */}
+      {/* 4. LinkedIn CTA */}
       <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-6 p-6 rounded-2xl border border-zinc-900 bg-black/60">
         <div className="text-center sm:text-left">
           <div className="text-sm font-light text-white">Join the Discussion on LinkedIn</div>
-          <div className="text-xs text-zinc-500 font-mono">
-            Follow official M1 Aviation announcements and industry commentaries.
-          </div>
         </div>
 
         <div className="flex items-center gap-4">

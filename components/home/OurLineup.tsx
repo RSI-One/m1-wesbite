@@ -167,9 +167,6 @@ export default function OurLineup() {
         <h2 className="text-4xl md:text-5xl font-light tracking-tight text-white mt-2">
           Our Lineup
         </h2>
-        <p className="text-sm text-zinc-400 mt-3 max-w-md mx-auto">
-          Pioneering software, intelligent platforms, and strategic alliances reshaping business aviation.
-        </p>
 
         {/* Audio FX Status Badge */}
         <div className="flex items-center justify-center gap-3 mt-4">
@@ -222,12 +219,6 @@ export default function OurLineup() {
           >
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div className="max-w-2xl space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-zinc-400 font-mono tracking-widest uppercase">
-                    M1 Core Solution
-                  </span>
-                </div>
-
                 <h3 className="text-3xl md:text-4xl font-light tracking-tight">
                   {prod.title}
                 </h3>
