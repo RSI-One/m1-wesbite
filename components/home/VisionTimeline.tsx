@@ -36,7 +36,7 @@ export default function VisionTimeline() {
           The 10-Year Vision
         </h2>
         <p className="text-sm text-zinc-400 mt-2 font-mono">
-          Architecting an enduring sovereign ecosystem: 2027 — 2037
+          Architecting an enduring sovereign ecosystem: 2016 — 2026
         </p>
       </div>
 

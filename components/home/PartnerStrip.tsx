@@ -23,12 +23,12 @@ export default function PartnerStrip() {
 
       {/* Top Section Metadata */}
       <div className="max-w-7xl mx-auto px-6 mb-6 flex items-center justify-between">
-        <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-zinc-500">
+        {/* <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-zinc-500">
           Industry Alliances & Operators
         </span>
         <span className="text-[10px] font-mono text-zinc-600 hidden sm:inline">
           Verified Global Network
-        </span>
+        </span> */}
       </div>
 
       {/* Continuous Marquee moving from Left to Right */}
@@ -60,12 +60,12 @@ export default function PartnerStrip() {
           <div className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-white/80 to-transparent animate-sweep-ltr shadow-[0_0_12px_rgba(255,255,255,0.7)]" />
         </div>
         <div className="flex justify-between items-center text-[9px] font-mono text-zinc-600 uppercase tracking-widest mt-2 px-1">
-          <span>TX-01 / Global Broadcast</span>
-          <span className="flex items-center gap-1.5 text-zinc-500">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
+          {/* <span>TX-01 / Global Broadcast</span>
+          <span className="flex items-center gap-1.5 text-zinc-500"> */}
+            {/* <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
             Live Alliance Stream
-          </span>
-          <span>RX-88 / Continuous Sync</span>
+          </span> */}
+          {/* <span>RX-88 / Continuous Sync</span> */}
         </div>
       </div>
     </section>
