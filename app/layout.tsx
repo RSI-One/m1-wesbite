@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://m1-aviation-website.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://m1.rsinternational.net"
   ),
   title: {
     default: "M1 Aviation | Business Aviation Digital Ecosystem",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "M1 Aviation | Business Aviation Digital Ecosystem",
     description:
       "The premier digital ecosystem for business aviation: M1 Marketplace, SIOS autonomous operating intelligence, and vetted industry partner alliance.",
-    url: "https://m1-aviation-website.vercel.app",
+    url: "https://m1.rsinternational.net",
     siteName: "M1 Aviation",
     images: [
       {
@@ -95,21 +95,21 @@ const jsonLdData = {
   "@graph": [
     {
       "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
-      "@id": "https://m1-aviation-website.vercel.app/#organization",
+      "@id": "https://m1.rsinternational.net/#organization",
       "name": "M1 Aviation",
       "alternateName": ["M1", "M1 Aviation Ecosystem", "M1 Private Jet Marketplace"],
       "legalName": "M1 Aviation Inc.",
-      "url": "https://m1-aviation-website.vercel.app",
+      "url": "https://m1.rsinternational.net",
       "logo": {
         "@type": "ImageObject",
-        "@id": "https://m1-aviation-website.vercel.app/#logo",
-        "url": "https://m1-aviation-website.vercel.app/m1-logo.png",
+        "@id": "https://m1.rsinternational.net/#logo",
+        "url": "https://m1.rsinternational.net/m1-logo.png",
         "caption": "M1 Aviation Logo"
       },
       "image": [
-        "https://m1-aviation-website.vercel.app/m1-logo.png",
-        "https://m1-aviation-website.vercel.app/images/marketplace-card.jpg",
-        "https://m1-aviation-website.vercel.app/images/jet-evolution-7.png"
+        "https://m1.rsinternational.net/m1-logo.png",
+        "https://m1.rsinternational.net/images/marketplace-card.jpg",
+        "https://m1.rsinternational.net/images/jet-evolution-7.png"
       ],
       "description":
         "M1 Aviation is the unified digital ecosystem for business aviation: verified aircraft marketplace with 7-step assisted acquisition, SIOS autonomous operating intelligence, and global industry partner alliance.",
@@ -273,48 +273,48 @@ const jsonLdData = {
     },
     {
       "@type": "WebSite",
-      "@id": "https://m1-aviation-website.vercel.app/#website",
-      "url": "https://m1-aviation-website.vercel.app",
+      "@id": "https://m1.rsinternational.net/#website",
+      "url": "https://m1.rsinternational.net",
       "name": "M1 Aviation",
       "publisher": {
-        "@id": "https://m1-aviation-website.vercel.app/#organization"
+        "@id": "https://m1.rsinternational.net/#organization"
       },
       "description":
         "Verified business jet marketplace, 7-step assisted acquisition, and SIOS autonomous operating intelligence.",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://m1-aviation-website.vercel.app/aviation-times?q={search_term_string}",
+        "target": "https://m1.rsinternational.net/aviation-times?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },
     {
       "@type": "Service",
-      "@id": "https://m1-aviation-website.vercel.app/#marketplace",
+      "@id": "https://m1.rsinternational.net/#marketplace",
       "name": "M1 Marketplace & 7-Step Assisted Acquisition",
       "provider": {
-        "@id": "https://m1-aviation-website.vercel.app/#organization"
+        "@id": "https://m1.rsinternational.net/#organization"
       },
       "serviceType": "Aircraft Brokerage & Transaction Advisory",
       "description":
         "Verified private aircraft marketplace offering 100% verified listings, neutral escrow protection, Part 145 inspection oversight, and a structured 7-step acquisition process.",
-      "url": "https://m1-aviation-website.vercel.app/marketplace"
+      "url": "https://m1.rsinternational.net/marketplace"
     },
     {
       "@type": "SoftwareApplication",
-      "@id": "https://m1-aviation-website.vercel.app/#sios",
+      "@id": "https://m1.rsinternational.net/#sios",
       "name": "SIOS (Super Intelligent Operating System)",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Cloud / Avionics Telemetry Integration",
       "description":
         "Autonomous operating intelligence for business aviation that unifies telemetry, predictive maintenance, and digital provenance.",
-      "url": "https://m1-aviation-website.vercel.app/saios",
+      "url": "https://m1.rsinternational.net/saios",
       "creator": {
-        "@id": "https://m1-aviation-website.vercel.app/#organization"
+        "@id": "https://m1.rsinternational.net/#organization"
       }
     },
     {
       "@type": "FAQPage",
-      "@id": "https://m1-aviation-website.vercel.app/#faqs",
+      "@id": "https://m1.rsinternational.net/#faqs",
       "mainEntity": [
         {
           "@type": "Question",
@@ -331,7 +331,7 @@ const jsonLdData = {
           "acceptedAnswer": {
             "@type": "Answer",
             "text":
-              "M1 Marketplace (https://m1-aviation-website.vercel.app/marketplace) provides a verified airframe transaction platform with institutional third-party escrow and a structured 7-step assisted acquisition process to eliminate ghost listings and transactional fraud."
+              "M1 Marketplace (https://m1.rsinternational.net/marketplace) provides a verified airframe transaction platform with institutional third-party escrow and a structured 7-step assisted acquisition process to eliminate ghost listings and transactional fraud."
           }
         },
         {

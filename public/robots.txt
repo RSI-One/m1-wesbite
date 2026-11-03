@@ -53,9 +53,9 @@ User-agent: FacebookBot
 Allow: /
 
 # Sitemaps and AI Context Directives
-Sitemap: https://m1-aviation-website.vercel.app/sitemap.xml
+Sitemap: https://m1.rsinternational.net/sitemap.xml
 
 # LLM & AI Agent Context Files (GEO - Generative Engine Optimization)
-# Full site context: https://m1-aviation-website.vercel.app/llms.txt
-# Deep context pack: https://m1-aviation-website.vercel.app/llms-full.txt
-# Agent instructions: https://m1-aviation-website.vercel.app/agents.md
+# Full site context: https://m1.rsinternational.net/llms.txt
+# Deep context pack: https://m1.rsinternational.net/llms-full.txt
+# Agent instructions: https://m1.rsinternational.net/agents.md
