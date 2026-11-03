@@ -271,6 +271,11 @@ export default function Jet3DViewer({
       if (model) {
         const target = targetTransformRef.current;
 
+        // Add interactive mouse tilt if enabled
+        const mouseTiltYaw = interactive ? target.mouseX * 8 : 0;
+        const mouseTiltPitch = interactive ? -target.mouseY * 6 : 0;
+        const mouseTiltRoll = interactive ? target.mouseX * 4 : 0;
+
         // Auto-rotation (showcase turntable rotation)
         if (target.autoRotate) {
           const isFlightActive =
@@ -303,11 +308,6 @@ export default function Jet3DViewer({
           curRot.pitch += (target.pitch - curRot.pitch) * 0.12;
           curRot.roll += (target.roll - curRot.roll) * 0.12;
         }
-
-        // Add interactive mouse tilt if enabled
-        const mouseTiltYaw = interactive ? target.mouseX * 8 : 0;
-        const mouseTiltPitch = interactive ? -target.mouseY * 6 : 0;
-        const mouseTiltRoll = interactive ? target.mouseX * 4 : 0;
 
         // Degree to radians
         const toRad = Math.PI / 180;
