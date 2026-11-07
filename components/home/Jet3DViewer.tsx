@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { getJetModel, JetColorConfig, applyJetColors } from "./jetModelManager";
 
@@ -39,7 +39,7 @@ export default function Jet3DViewer({
   engineThrust = 0,
   immediate = false,
   customColors,
-  modelPath = "/models/bombardier_windjet_365/scene.gltf",
+  modelPath = "/models/bombardier_windjet_365_fast.glb",
   lightingTheme = "default",
   cameraPos,
   cameraY,
@@ -49,6 +49,7 @@ export default function Jet3DViewer({
 }: Jet3DViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
 
   // References for Three.js state
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -227,6 +228,7 @@ export default function Jet3DViewer({
         scene.add(jetModel);
 
         isLoadedRef.current = true;
+        setIsModelLoaded(true);
         onLoaded?.();
       })
       .catch((err) => {
@@ -358,9 +360,28 @@ export default function Jet3DViewer({
       className={`relative w-full h-full overflow-visible ${className}`}
       style={style}
     >
+      {/* Instant aerodynamic silhouette while 3D model streams in (Guarantees zero blank frame delay) */}
+      {!isModelLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-700">
+          <div className="relative w-64 h-32 flex items-center justify-center opacity-35 animate-pulse">
+            <svg
+              viewBox="0 0 240 100"
+              className="w-full h-full text-cyan-400 drop-shadow-[0_0_15px_rgba(56,189,248,0.5)]"
+            >
+              <path
+                d="M 230 50 L 140 42 L 100 12 L 85 14 L 105 44 L 40 46 L 20 32 L 8 34 L 16 50 L 8 66 L 20 68 L 40 54 L 105 56 L 85 86 L 100 88 L 140 58 Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
+
       <canvas
         ref={canvasRef}
-        className="w-full h-full block pointer-events-none select-none drop-shadow-[0_24px_50px_rgba(0,0,0,0.85)]"
+        className={`w-full h-full block pointer-events-none select-none drop-shadow-[0_24px_50px_rgba(0,0,0,0.85)] transition-opacity duration-500 ${
+          isModelLoaded ? "opacity-100" : "opacity-0"
+        }`}
       />
     </div>
   );

@@ -139,16 +139,17 @@ export default function Footer() {
     const video = videoRef.current;
     if (!video) return;
 
-    const applySpeed = () => {
-      video.playbackRate = 1.0;
-    };
-
-    applySpeed();
-    video.play().catch(() => {});
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playbackRate = 1.0;
 
     const startPlay = () => {
-      video.play().catch(() => {});
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
     };
+
+    startPlay();
     window.addEventListener("scroll", startPlay, { passive: true, once: true });
     window.addEventListener("click", startPlay, { passive: true, once: true });
     window.addEventListener("touchstart", startPlay, { passive: true, once: true });
@@ -196,9 +197,7 @@ export default function Footer() {
 
     video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("ended", handleEnded);
-    video.addEventListener("loadedmetadata", applySpeed);
-    video.addEventListener("play", applySpeed);
-    video.addEventListener("canplay", applySpeed);
+    video.addEventListener("canplay", startPlay);
 
     return () => {
       if (observer) observer.disconnect();
@@ -207,9 +206,7 @@ export default function Footer() {
       window.removeEventListener("touchstart", startPlay);
       video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("ended", handleEnded);
-      video.removeEventListener("loadedmetadata", applySpeed);
-      video.removeEventListener("play", applySpeed);
-      video.removeEventListener("canplay", applySpeed);
+      video.removeEventListener("canplay", startPlay);
     };
   }, []);
 

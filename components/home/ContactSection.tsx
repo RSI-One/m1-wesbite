@@ -74,9 +74,9 @@ export default function ContactSection() {
               src="/images/footer-jet.png"
               alt="M1 Velocity S1 Supersonic Aircraft"
               fill
-              sizes="100%"
+              sizes="(max-width: 768px) 100vw, 1200px"
               className="object-cover object-right-bottom"
-              priority={false}
+              priority={true}
             />
           </div>
           {/* Subtle gradient overlay so left/top of form stays clean, bright and readable */}

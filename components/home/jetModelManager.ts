@@ -120,7 +120,7 @@ function cloneJetModelWithMaterials(root: THREE.Group): THREE.Group {
  */
 export function getJetModel(
   colors?: JetColorConfig,
-  modelPath: string = "/models/bombardier_windjet_365/scene.gltf"
+  modelPath: string = "/models/bombardier_windjet_365_fast.glb"
 ): Promise<THREE.Group> {
   const activeColors = colors || LIGHT_PLATINUM_TITANIUM_COLORS;
   const cached = cachedScenes.get(modelPath);
