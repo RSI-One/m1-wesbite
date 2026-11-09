@@ -28,8 +28,11 @@ export default function VisionTimeline() {
   const [isLandedAtRunway, setIsLandedAtRunway] = useState(false);
 
   useEffect(() => {
+    let active = true;
+    const isDesktop = () => typeof window !== "undefined" && window.innerWidth >= 1024;
+
     const onScroll = () => {
-      if (!sectionRef.current) return;
+      if (!isDesktop() || !sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const scrollable = rect.height - window.innerHeight;
       if (scrollable <= 0) return;
@@ -40,40 +43,43 @@ export default function VisionTimeline() {
     };
 
     const loop = () => {
-      // Silky 60fps / 120fps physics lerp interpolation (smoother, more relaxed cinematic flight pacing)
-      smoothRef.current += (targetRef.current - smoothRef.current) * 0.07;
-      const p = smoothRef.current;
-      setProgress(p);
+      if (!active) return;
+      if (isDesktop()) {
+        // Silky 60fps / 120fps physics lerp interpolation (smoother, more relaxed cinematic flight pacing)
+        smoothRef.current += (targetRef.current - smoothRef.current) * 0.07;
+        const p = smoothRef.current;
+        setProgress(p);
 
-      // Smoothly map active milestone index across the 6 milestones
-      const pContinuous = clamp(((p - 0.06) / 0.60) * 5.0, 0, 5.8);
-      const ni = clamp(Math.round(pContinuous), 0, TOTAL - 1);
-      setActiveIndex(ni);
+        // Smoothly map active milestone index across the 6 milestones
+        const pContinuous = clamp(((p - 0.06) / 0.60) * 5.0, 0, 5.8);
+        const ni = clamp(Math.round(pContinuous), 0, TOTAL - 1);
+        setActiveIndex(ni);
 
-      // Strict single-plane handoff synchronized with ScrollFlightJet touchdown
-      const isFlightActive =
-        typeof window !== "undefined" &&
-        !!(window as unknown as { __M1_SCROLL_JET_ACTIVE?: boolean }).__M1_SCROLL_JET_ACTIVE;
-      const flightLandingP =
-        typeof window !== "undefined"
-          ? (window as unknown as { __M1_SCROLL_JET_LANDING_P?: number }).__M1_SCROLL_JET_LANDING_P ?? 1.0
-          : 1.0;
+        // Strict single-plane handoff synchronized with ScrollFlightJet touchdown
+        const isFlightActive =
+          typeof window !== "undefined" &&
+          !!(window as unknown as { __M1_SCROLL_JET_ACTIVE?: boolean }).__M1_SCROLL_JET_ACTIVE;
+        const flightLandingP =
+          typeof window !== "undefined"
+            ? (window as unknown as { __M1_SCROLL_JET_LANDING_P?: number }).__M1_SCROLL_JET_LANDING_P ?? 1.0
+            : 1.0;
 
-      if (isFlightActive) {
-        // While flight jet is approaching, keep runway jet hidden.
-        // The instant flight jet touches down (flightLandingP >= 0.98), activate runway jet with zero double-plane ghosting
-        const isLanded = flightLandingP >= 0.98;
-        setLandingProgress(isLanded ? 1.0 : 0.0);
-        setIsLandedAtRunway(isLanded || p > 0);
-      } else {
-        // Fallback when scrolled directly into vision or flight completed
-        if (sectionRef.current) {
-          const rect = sectionRef.current.getBoundingClientRect();
-          setIsLandedAtRunway(rect.top <= 20 || p > 0);
+        if (isFlightActive) {
+          // While flight jet is approaching, keep runway jet hidden.
+          // The instant flight jet touches down (flightLandingP >= 0.98), activate runway jet with zero double-plane ghosting
+          const isLanded = flightLandingP >= 0.98;
+          setLandingProgress(isLanded ? 1.0 : 0.0);
+          setIsLandedAtRunway(isLanded || p > 0);
         } else {
-          setIsLandedAtRunway(true);
+          // Fallback when scrolled directly into vision or flight completed
+          if (sectionRef.current) {
+            const rect = sectionRef.current.getBoundingClientRect();
+            setIsLandedAtRunway(rect.top <= 20 || p > 0);
+          } else {
+            setIsLandedAtRunway(true);
+          }
+          setLandingProgress(1.0);
         }
-        setLandingProgress(1.0);
       }
 
       rafRef.current = requestAnimationFrame(loop);
@@ -84,6 +90,7 @@ export default function VisionTimeline() {
     rafRef.current = requestAnimationFrame(loop);
 
     return () => {
+      active = false;
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(rafRef.current);
     };
@@ -183,13 +190,17 @@ export default function VisionTimeline() {
 
   return (
     <section
-      ref={sectionRef}
       id="vision"
       aria-label="The 10-Year Vision Roadmap"
       className="relative w-full select-none"
-      style={{ height: "720vh" }}
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#01050a] flex items-center justify-center">
+      {/* ── DESKTOP: 720vh Interactive 3D Concentric Tunnel (Untouched PC View) ── */}
+      <div
+        ref={sectionRef}
+        className="hidden lg:block relative w-full"
+        style={{ height: "720vh" }}
+      >
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#01050a] flex items-center justify-center">
 
         {/* ── 1. LAYER 1: DEEP BLACK SPACE & STARS (VISIBLE THROUGHOUT, REVEALED AT END) ── */}
         <div className="absolute inset-0 w-full h-full pointer-events-none bg-[#01050a] z-0">
@@ -576,8 +587,8 @@ export default function VisionTimeline() {
                 }}
               />
 
-              {/* 3D Model: Consistently Light Platinum Titanium Silver Aircraft */}
-              <div className="w-full h-[320px] sm:h-[390px] relative pointer-events-none select-none">
+              {/* 3D Model on Desktop / High-Perf Static Silhouette on Mobile (Zero GPU stall on mobile) */}
+              <div className="hidden md:block w-full h-[320px] sm:h-[390px] relative pointer-events-none select-none">
                 <Jet3DViewer
                   yaw={finalYaw}
                   pitch={finalPitch}
@@ -588,6 +599,18 @@ export default function VisionTimeline() {
                   lightIntensity={1.4}
                   customColors={LIGHT_PLATINUM_TITANIUM_COLORS}
                   lightingTheme="default"
+                />
+              </div>
+
+              {/* Mobile / Fallback static aircraft silhouette */}
+              <div className="block md:hidden w-full h-[180px] relative pointer-events-none select-none flex items-center justify-center">
+                <Image
+                  src="/images/vision-rear-jet-crisp.png"
+                  alt="M1 Aircraft"
+                  width={340}
+                  height={110}
+                  className="object-contain opacity-95 drop-shadow-[0_12px_28px_rgba(0,0,0,0.9)]"
+                  priority
                 />
               </div>
             </div>
@@ -723,6 +746,109 @@ export default function VisionTimeline() {
           </p>
         </div>
 
+        </div>
+      </div>
+
+      {/* ── MOBILE & TABLET: Streamlined Vertical Strategic Roadmap ── */}
+      <div className="block lg:hidden relative w-full bg-[#01050a] py-16 sm:py-20 px-4 sm:px-6 overflow-hidden">
+        {/* Subtle Cosmic Starfield Atmosphere */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage:
+                "radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 150px 120px, #7dd3fc, rgba(0,0,0,0)), radial-gradient(1px 1px at 280px 320px, #38bdf8, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 450px 80px, #ffffff, rgba(0,0,0,0))",
+              backgroundSize: "400px 300px",
+            }}
+          />
+          <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-[#01050a] via-transparent to-transparent" />
+          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#01050a] via-transparent to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
+          {/* Header */}
+          <div className="text-center space-y-2 mb-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md shadow-[0_0_15px_rgba(0,229,255,0.15)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
+              <span className="text-[10px] font-mono tracking-[0.25em] text-[#00e5ff] uppercase">
+                Let&apos;s Travel Together
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+              10-Year Long Vision
+            </h2>
+            <p className="text-xs text-zinc-400 font-mono tracking-wider max-w-xs mx-auto">
+              A journey towards the next era of aviation.
+            </p>
+          </div>
+
+          {/* 3D Static Aircraft Centerpiece (Rear Perspective View) */}
+          <div className="relative w-full max-w-[340px] my-4 flex flex-col items-center justify-center">
+            {/* Ambient Cyan Thruster Bloom */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-16 bg-[#00e5ff]/20 blur-2xl rounded-full pointer-events-none" />
+            
+            <Image
+              src="/images/vision-rear-jet-crisp.png"
+              alt="M1 Jet 3D Perspective"
+              width={340}
+              height={110}
+              className="w-full h-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)] relative z-10"
+              priority
+            />
+
+            {/* Glowing Runway Guideline */}
+            <div className="w-full max-w-[240px] h-[1.5px] bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-2 shadow-[0_0_10px_#00e5ff]" />
+            <div className="text-[9px] font-mono tracking-[0.28em] text-cyan-400/80 mt-1 uppercase">
+              CYCLE 2027–2037
+            </div>
+          </div>
+
+          {/* Vertical Roadmap Timeline */}
+          <div className="relative w-full mt-8 pl-6 sm:pl-8 space-y-5">
+            {/* Continuous Vertical Cyan Spine */}
+            <div className="absolute left-[9px] sm:left-[13px] top-3 bottom-4 w-[2px] bg-gradient-to-b from-[#00e5ff] via-[#00e5ff]/50 to-transparent shadow-[0_0_8px_rgba(0,229,255,0.4)]" />
+
+            {VISION_MILESTONES.map((milestone, idx) => (
+              <div key={milestone.year} className="relative">
+                {/* Node Indicator Dot */}
+                <div className="absolute -left-[24px] sm:-left-[28px] top-3.5 w-5 h-5 rounded-full bg-[#020712] border-2 border-[#00e5ff] flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.6)] z-10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]" />
+                </div>
+
+                {/* Milestone Card */}
+                <div
+                  className="rounded-2xl p-4 sm:p-5 border border-white/10 backdrop-blur-xl"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(8, 14, 24, 0.90) 0%, rgba(3, 7, 14, 0.98) 100%)",
+                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12)",
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#00e5ff] text-black font-mono font-bold text-[9px] tracking-wider uppercase shadow-[0_0_8px_rgba(0,229,255,0.3)]">
+                      {milestone.phase}
+                    </span>
+                    <span className="text-xs font-mono font-bold text-cyan-300 tracking-widest">
+                      {milestone.year}
+                    </span>
+                  </div>
+
+                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+                    {milestone.title}
+                  </h3>
+
+                  <p className="mt-1.5 text-xs text-zinc-300 font-light leading-relaxed">
+                    {milestone.statement}
+                  </p>
+
+                  <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-zinc-500">
+                    <span>{milestone.cycle}</span>
+                    <span className="text-cyan-400/60 font-semibold">0{idx + 1} / 06</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

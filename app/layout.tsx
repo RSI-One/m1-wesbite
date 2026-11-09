@@ -405,12 +405,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preconnect & DNS-Prefetch to Cloudinary Edge CDN for sub-second asset delivery */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-black text-[#f5efeb] selection:bg-zinc-800 selection:text-white relative">
+      <body className="min-h-screen flex flex-col bg-black text-[#f5efeb] selection:bg-zinc-800 selection:text-white relative overflow-x-hidden">
         <SmoothScroll>
           <CustomCursor />
 

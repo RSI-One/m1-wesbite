@@ -39,7 +39,7 @@ export default function Jet3DViewer({
   engineThrust = 0,
   immediate = false,
   customColors,
-  modelPath = "/models/bombardier_windjet_365_fast.glb",
+  modelPath = process.env.NEXT_PUBLIC_CLOUDINARY_MODEL_URL || "/models/bombardier_windjet_365_fast.glb",
   lightingTheme = "default",
   cameraPos,
   cameraY,

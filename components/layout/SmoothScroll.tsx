@@ -7,8 +7,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Only initialize smooth scroll on fine pointer / desktop devices
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // Only initialize smooth scroll on desktop fine-pointer devices (Disable on mobile/touch to guarantee 0 latency)
+    if (
+      typeof window === "undefined" ||
+      window.innerWidth < 1024 ||
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
 

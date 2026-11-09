@@ -80,11 +80,14 @@ export default function Hero({ paused = false }: { paused?: boolean }) {
   return (
     <section className="relative w-full h-screen min-h-[650px] flex items-center justify-center overflow-hidden bg-black select-none">
 
-      {/* ── Background Video ────────────────────────────────────────────── */}
+      {/* ── Background Video (Served from Global Cloudinary Edge CDN for sub-second start) ── */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        src="/videos/hero.mp4"
+        src={
+          process.env.NEXT_PUBLIC_CLOUDINARY_HERO_VIDEO_URL ||
+          "https://res.cloudinary.com/gf2v9kfu/video/upload/v1794257278/m1-aviation/videos/hero.mp4"
+        }
         autoPlay
         muted
         loop

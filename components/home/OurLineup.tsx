@@ -173,7 +173,10 @@ export default function OurLineup() {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Continuous 60fps/120fps fluid RAF loop with inertia & sound triggers
+  // Continuous 60fps/120fps fluid RAF loop with adaptive velocity tracking & clean sound debounce
+  const lastSoundTimeRef = useRef(0);
+  const lastProgressStateRef = useRef(0);
+
   useEffect(() => {
     let animId: number;
 
@@ -188,24 +191,49 @@ export default function OurLineup() {
       targetProgressRef.current = Math.max(0, Math.min(1, rawProgress));
     };
 
+    const playDebouncedSound = (cardIndex: number) => {
+      const now = performance.now();
+      if (now - lastSoundTimeRef.current > 180) {
+        lastSoundTimeRef.current = now;
+        playSolidDockSound(cardIndex);
+      }
+    };
+
     const updateLoop = () => {
       const diff = targetProgressRef.current - currentProgressRef.current;
-      currentProgressRef.current += diff * 0.095;
-      const p = currentProgressRef.current;
-      setSmoothProgress(p);
+      const absDiff = Math.abs(diff);
 
-      // Sound triggers on downward touchdown landing
+      // Adaptive lerp factor:
+      // - Normal slow scroll: 0.12 (silky and luxurious)
+      // - Rapid/continuous scroll: dynamically ramp up to 0.35 - 0.55 so cards track tightly without lagging
+      const lerpFactor = absDiff > 0.30 ? 0.50 : absDiff > 0.15 ? 0.30 : 0.12;
+
+      if (absDiff < 0.0005) {
+        currentProgressRef.current = targetProgressRef.current;
+      } else {
+        currentProgressRef.current += diff * lerpFactor;
+      }
+
+      const p = currentProgressRef.current;
+
+      // Throttle React state updates to avoid thrashing the DOM when movement is negligible
+      if (Math.abs(p - lastProgressStateRef.current) > 0.0008 || absDiff < 0.001) {
+        lastProgressStateRef.current = p;
+        setSmoothProgress(p);
+      }
+
+      // Sound triggers on downward touchdown landing with rate limiting
       if (p >= 0.275 && !dockedCards.current.has(1)) {
         dockedCards.current.add(1);
-        playSolidDockSound(1);
+        playDebouncedSound(1);
       }
       if (p >= 0.525 && !dockedCards.current.has(2)) {
         dockedCards.current.add(2);
-        playSolidDockSound(2);
+        playDebouncedSound(2);
       }
       if (p >= 0.775 && !dockedCards.current.has(3)) {
         dockedCards.current.add(3);
-        playSolidDockSound(3);
+        playDebouncedSound(3);
       }
 
       // Hysteresis re-arm when scrolling backward
@@ -370,7 +398,7 @@ export default function OurLineup() {
             return (
               <div
                 key={prod.id}
-                className={`absolute left-0 right-0 rounded-3xl border pt-3 sm:pt-4 px-6 sm:px-8 md:px-10 pb-5 sm:pb-6 h-[480px] sm:h-[505px] md:h-[525px] flex flex-col justify-between will-change-transform ${prod.cardStyle}`}
+                className={`absolute left-0 right-0 rounded-3xl border pt-3 sm:pt-4 px-4 sm:px-8 md:px-10 pb-4 sm:pb-6 h-[440px] sm:h-[505px] md:h-[525px] flex flex-col justify-between will-change-transform ${prod.cardStyle}`}
                 style={{
                   top: `${cardTop}px`,
                   zIndex: 10 + index,

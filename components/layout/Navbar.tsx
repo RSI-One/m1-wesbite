@@ -54,16 +54,53 @@ export default function Navbar() {
           hiddenAtBottom ? "translate-y-28 opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
         }`}
       >
+        {/* ── Mobile Compact Pill (< md): Perfectly fits mobile width with zero overflow ── */}
+        <nav
+          aria-label="Mobile Navigation"
+          className="pointer-events-auto flex md:hidden items-center justify-between w-auto min-w-[260px] max-w-[320px] px-5 py-2 rounded-full backdrop-blur-xl border border-white/25 text-white font-mono text-[11px] uppercase tracking-wider shadow-[0_12px_40px_rgba(0,0,0,0.75),inset_0_1px_1px_rgba(255,255,255,0.3)]"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(10, 15, 25, 0.35) 50%, rgba(5, 8, 14, 0.45) 100%)",
+          }}
+        >
+          <Link
+            href="/"
+            className="flex items-center gap-2 group shrink-0"
+            aria-label="M1 Home"
+          >
+            <M1Logo
+              width={75}
+              height={22}
+              className="h-4 w-auto opacity-100"
+            />
+          </Link>
+
+          <div className="h-4 w-[1px] bg-white/20 mx-3" />
+
+          <button
+            type="button"
+            aria-label="Open Extended Menu Drawer"
+            onClick={() => setMenuOpen(true)}
+            className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-zinc-100 text-[10px] font-bold tracking-[0.18em] transition-all cursor-pointer"
+          >
+            <span>MENU</span>
+            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </nav>
+
+        {/* ── Desktop Widescreen Floating Bar (>= md): 100% Unchanged Luxury Experience ── */}
         <nav
           aria-label="Main Suspended Navigation"
-          className="pointer-events-auto flex items-center justify-between sm:justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 rounded-full backdrop-blur-xl border border-white/20 hover:border-white/35 text-white transition-all max-w-5xl md:max-w-5xl lg:max-w-6xl w-full sm:w-auto overflow-x-auto no-scrollbar font-mono text-[11px] sm:text-xs uppercase tracking-wider shadow-[0_12px_40px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.3)]"
+          className="pointer-events-auto hidden md:flex items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 rounded-full backdrop-blur-xl border border-white/20 hover:border-white/35 text-white transition-all max-w-5xl md:max-w-5xl lg:max-w-6xl w-auto font-mono text-xs uppercase tracking-wider shadow-[0_12px_40px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.3)]"
           style={{
             background:
               "linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(10, 15, 25, 0.22) 50%, rgba(5, 8, 14, 0.28) 100%)",
           }}
         >
           {/* Inner content */}
-          <div className="flex items-center justify-between sm:justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 w-full">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 w-full">
             {/* 1. M1 Logo */}
             <Link
               href="/"

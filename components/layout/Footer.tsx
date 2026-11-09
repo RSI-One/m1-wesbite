@@ -211,12 +211,15 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative bg-black text-zinc-400 border-t border-zinc-900 pt-44 sm:pt-48 pb-20 sm:pb-28 overflow-hidden select-none">
-      {/* ── Background Video covering entire footer (Matching Hero section) ───────────── */}
+    <footer className="relative bg-black text-zinc-400 border-t border-zinc-900 pt-36 sm:pt-48 pb-32 sm:pb-36 md:pb-28 overflow-hidden select-none">
+      {/* ── Background Video covering entire footer (Cached from Cloudinary Edge CDN) ───────────── */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
-        src="/videos/hero.mp4"
+        src={
+          process.env.NEXT_PUBLIC_CLOUDINARY_HERO_VIDEO_URL ||
+          "https://res.cloudinary.com/gf2v9kfu/video/upload/v1794257278/m1-aviation/videos/hero.mp4"
+        }
         autoPlay
         muted
         loop
@@ -226,11 +229,11 @@ export default function Footer() {
       />
 
       {/* Subtle dark tint over full video for clean visual contrast & text legibility (Matching Hero section) */}
-      <div className="absolute inset-0 bg-black/40 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-black/50 pointer-events-none z-0" />
 
-      {/* ── Left Supersonic Jet (Hovering with Streamlines & Dynamic Afterburner Fire) ── */}
-      <div className="absolute left-[-25px] sm:left-0 md:left-6 lg:left-12 top-[-52px] sm:top-[-38px] md:top-[-32px] lg:top-[-28px] w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] h-[230px] sm:h-[310px] md:h-[380px] lg:h-[430px] z-10 group pointer-events-auto cursor-pointer">
-        <div className="relative w-full h-full flex items-center justify-center rotate-[12deg] transition-transform duration-500 ease-out group-hover:translate-x-3 group-hover:-translate-y-3 group-hover:rotate-[14deg] animate-[flightBobLeft_4.5s_easeInOut_infinite]">
+      {/* ── Left Supersonic Jet (Centered on Mobile, Left-Escort on Desktop) ── */}
+      <div className="absolute left-1/2 -translate-x-1/2 -top-10 sm:-top-12 md:left-6 md:translate-x-0 lg:left-12 md:top-[-32px] lg:top-[-28px] w-[260px] sm:w-[400px] md:w-[560px] lg:w-[640px] h-[170px] sm:h-[270px] md:h-[380px] lg:h-[430px] z-10 group pointer-events-auto cursor-pointer">
+        <div className="relative w-full h-full flex items-center justify-center rotate-[10deg] sm:rotate-[12deg] transition-transform duration-500 ease-out group-hover:translate-x-3 group-hover:-translate-y-3 group-hover:rotate-[14deg] animate-[flightBobLeft_4.5s_easeInOut_infinite]">
           <div className="relative w-full aspect-[1376/768]">
             {/* Small Moving Airflow / Speed Slipstream Lines */}
             <div className="absolute inset-0 pointer-events-none overflow-visible z-20">
@@ -245,7 +248,7 @@ export default function Footer() {
               src="/images/footer-jet.png"
               alt="M1 Supersonic Interceptor"
               fill
-              sizes="(max-width: 768px) 340px, 640px"
+              sizes="(max-width: 768px) 260px, 640px"
               className="object-contain relative z-10 drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
             />
 
@@ -255,8 +258,8 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Right Supersonic Jet (Mirrored, Banking toward Top Center & Dynamic Thrust Fire) ── */}
-      <div className="absolute right-[-25px] sm:right-0 md:right-6 lg:right-12 top-[-10px] sm:top-2 w-[340px] sm:w-[460px] md:w-[560px] lg:w-[640px] h-[230px] sm:h-[310px] md:h-[380px] lg:h-[430px] z-10 group pointer-events-auto cursor-pointer">
+      {/* ── Right Supersonic Jet (Desktop Only: hidden on mobile to prevent double-jet collision) ── */}
+      <div className="hidden md:block absolute right-0 md:right-6 lg:right-12 md:top-[-32px] lg:top-[-28px] w-[460px] md:w-[560px] lg:w-[640px] h-[310px] md:h-[380px] lg:h-[430px] z-10 group pointer-events-auto cursor-pointer">
         <div className="relative w-full h-full flex items-center justify-center scale-x-[-1] rotate-[12deg] transition-transform duration-500 ease-out group-hover:-translate-x-3 group-hover:-translate-y-3 group-hover:rotate-[14deg] animate-[flightBobRight_4.5s_easeInOut_infinite]">
           <div className="relative w-full aspect-[1376/768]">
             {/* Small Moving Airflow / Speed Slipstream Lines */}
@@ -283,8 +286,8 @@ export default function Footer() {
       </div>
 
       {/* ── Main Footer Information Grid ─────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10 pt-36 sm:pt-44 md:pt-48">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10 pt-24 sm:pt-40 md:pt-48">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 mb-12 sm:mb-16">
           {/* Col 1: Brand & Contact Info */}
           <div className="space-y-4">
             <Link

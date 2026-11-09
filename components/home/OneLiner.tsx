@@ -138,23 +138,23 @@ export default function OneLiner() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_35%_at_50%_62%,rgba(200,210,220,0.08)_0%,transparent_60%)]" />
       </div>
 
-      {/* 2. Header */}
-      <div className="relative z-20 text-center px-4 max-w-5xl mx-auto space-y-4 mb-8 sm:mb-14">
+      {/* 2. Header (Scaled for Mobile View) */}
+      <div className="relative z-20 text-center px-4 max-w-5xl mx-auto space-y-2 sm:space-y-4 mb-6 sm:mb-12">
         <div className="inline-flex items-center">
           <div
-            className="relative flex items-center gap-2 px-5 py-1.5 bg-zinc-900/95 border border-zinc-600/80 backdrop-blur-sm"
-            style={{ clipPath: "polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%)" }}
+            className="relative flex items-center gap-1.5 px-3.5 py-1 sm:px-5 sm:py-1.5 bg-zinc-900/95 border border-zinc-600/80 backdrop-blur-sm"
+            style={{ clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)" }}
           >
-            <span className="text-[20px] font-mono tracking-[0.42em] text-zinc-300 uppercase font-semibold">
+            <span className="text-xs sm:text-sm md:text-[18px] font-mono tracking-[0.35em] sm:tracking-[0.42em] text-zinc-300 uppercase font-semibold">
               Entre
             </span>
           </div>
         </div>
-        <div className="text-xs sm:text-sm font-mono tracking-[0.42em] text-zinc-400 font-medium uppercase">
+        <div className="text-[10px] sm:text-xs md:text-sm font-mono tracking-[0.25em] sm:tracking-[0.42em] text-zinc-400 font-medium uppercase">
           MORE THAN A MARKETPLACE.
         </div>
-        <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 py-1">
-          <div className="w-[180px] sm:w-[260px] md:w-[320px] lg:w-[360px] max-w-[85vw]">
+        <div className="flex flex-col items-center justify-center gap-1.5 sm:gap-3 py-0.5">
+          <div className="w-[120px] sm:w-[200px] md:w-[280px] lg:w-[340px] max-w-[80vw]">
             <Image
               src="/m1-logo.png"
               alt="M1 Logo"
@@ -165,7 +165,7 @@ export default function OneLiner() {
             />
           </div>
           <h2
-            className="text-6xl sm:text-8xl md:text-[7.5rem] font-black tracking-[0.14em] sm:tracking-[0.18em] uppercase leading-none"
+            className="text-3xl sm:text-6xl md:text-8xl lg:text-[7.5rem] font-black tracking-[0.08em] sm:tracking-[0.16em] uppercase leading-none"
             style={{
               background: "linear-gradient(180deg,#ffffff 0%,#e2e8f0 30%,#94a3b8 70%,#475569 100%)",
               WebkitBackgroundClip: "text",
@@ -177,7 +177,7 @@ export default function OneLiner() {
             ECOSYSTEM
           </h2>
         </div>
-        <p className="text-xs sm:text-sm font-mono tracking-[0.38em] text-zinc-400 font-medium uppercase">
+        <p className="text-[9px] sm:text-xs md:text-sm font-mono tracking-[0.20em] sm:tracking-[0.38em] text-zinc-400 font-medium uppercase">
           THE OPERATING LAYER CONNECTING AVIATION.
         </p>
       </div>
@@ -441,7 +441,7 @@ export default function OneLiner() {
       </div>
 
       {/* 4. Mobile Layout (First 4 cards) */}
-      <div className="lg:hidden relative max-w-xl mx-auto px-4 z-20 space-y-4">
+      <div className="lg:hidden relative max-w-xl mx-auto px-4 z-20 space-y-4 pb-8">
         <div className="relative w-full max-w-md mx-auto aspect-[16/10] flex items-center justify-center">
           <div className="absolute inset-x-8 bottom-4 h-20 rounded-full bg-slate-400/10 blur-2xl pointer-events-none" />
           <Image

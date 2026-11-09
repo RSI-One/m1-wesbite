@@ -58,169 +58,149 @@ export default function ContactSection() {
         </p>
       </div>
 
-      {/* ── White to Black/Grey Gradient Form Card with Black Text and Silver Input Fields ─── */}
-      <div className="relative bg-gradient-to-br from-white via-zinc-100 via-35% to-[#0e1017] text-black rounded-3xl p-8 sm:p-12 md:p-14 shadow-[0_25px_60px_rgba(255,255,255,0.06)] border border-zinc-200 overflow-hidden z-10">
-        {/* Jet image watermark with white-to-black/grey gradient */}
+      {/* ── Executive Obsidian Glassmorphic Form Card with Silver Inputs & Parallelogram CTAs ─── */}
+      <div className="relative bg-[#0a0d14]/95 backdrop-blur-2xl text-white rounded-3xl p-6 sm:p-10 md:p-14 shadow-[0_25px_80px_rgba(0,0,0,0.95)] border border-white/15 overflow-hidden z-10">
+        {/* Subtle Jet Watermark Blueprint in background */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-          {/* Base gradient layer: white to black/grey */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white via-[#eef0f4] via-35% to-[#090b10]" />
-
           <div
             id="contact-jet-destination"
-            className="absolute -bottom-4 -right-8 sm:right-0 sm:bottom-0 w-full h-full transition-opacity duration-200"
-            style={{ opacity: 1 }}
+            className="absolute -bottom-6 -right-6 sm:right-0 sm:bottom-0 w-[380px] sm:w-[500px] h-[260px] sm:h-[350px] opacity-15"
           >
             <Image
               src="/images/footer-jet.png"
-              alt="M1 Velocity S1 Supersonic Aircraft"
+              alt="M1 Supersonic Aircraft"
               fill
-              sizes="(max-width: 768px) 100vw, 1200px"
-              className="object-cover object-right-bottom"
+              sizes="(max-width: 768px) 380px, 500px"
+              className="object-contain object-right-bottom"
               priority={true}
             />
           </div>
-          {/* Subtle gradient overlay so left/top of form stays clean, bright and readable */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-white/45 via-45% to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0d14] via-transparent to-transparent" />
         </div>
 
         {/* Top Avionics Dispatch Telemetry Header */}
-        <div className="pb-6 mb-8 border-b border-zinc-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-zinc-500">
+        <div className="pb-5 mb-6 sm:mb-8 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[10px] sm:text-[11px] font-mono text-zinc-400 relative z-10">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-black" />
-            <span className="font-semibold text-zinc-900 tracking-wider">M1 FLIGHT COMMS // INQUIRY DISPATCH</span>
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+            <span className="font-semibold text-white tracking-wider">M1 FLIGHT COMMS // INQUIRY DISPATCH</span>
           </div>
-          <div className="tracking-widest uppercase text-zinc-400">
+          <div className="tracking-widest uppercase text-zinc-500">
             TRANSMISSION SECURE • CYOO / OPPS LINK
           </div>
         </div>
 
         {status === "success" ? (
-          <div className="text-center py-16 space-y-4">
-            <div className="w-14 h-14 rounded-full bg-zinc-100 border border-zinc-300 text-zinc-900 flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">
+          <div className="text-center py-12 sm:py-16 space-y-4 relative z-10">
+            <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">
               ✓
             </div>
-            <h3 className="text-2xl sm:text-3xl font-light tracking-tight text-zinc-950">
+            <h3 className="text-2xl sm:text-3xl font-light tracking-tight text-white">
               Inquiry Dispatched
             </h3>
-            <p className="text-sm text-zinc-600 max-w-md mx-auto leading-relaxed">
-              Thank you, <span className="font-semibold text-zinc-900">{formData.fullName}</span>. Your inquiry has been transmitted to our flight team. An executive will connect at <span className="font-semibold text-zinc-900">{formData.email}</span> shortly.
+            <p className="text-xs sm:text-sm text-zinc-300 max-w-md mx-auto leading-relaxed">
+              Thank you, <span className="font-semibold text-white">{formData.fullName}</span>. Your inquiry has been transmitted to our flight team. An executive will connect at <span className="font-semibold text-white">{formData.email}</span> shortly.
             </p>
             <div className="pt-6">
               <ParallelogramButton
                 onClick={() => setStatus("idle")}
                 variant="white"
-                className="text-xs border-zinc-400"
+                className="text-xs py-3 px-8"
               >
                 Send Another Dispatch
               </ParallelogramButton>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 relative z-10">
             {errorMessage && (
-              <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-mono">
+              <div className="p-3.5 rounded-xl bg-red-950/60 border border-red-500/50 text-red-200 text-xs font-mono">
                 {errorMessage}
               </div>
             )}
 
             {/* Row 1: 1. Full name & 2. Position */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
-                  1. Full name <span className="text-red-500">*</span>
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
+                  1. Full name <span className="text-rose-400">*</span>
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs">👤</span>
-                  <input
-                    type="text"
-                    required
-                    value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    placeholder="e.g. Captain Alexander Vance"
-                    className="w-full pl-10 pr-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all placeholder-zinc-400 font-normal"
-                  />
-                </div>
+                <input
+                  type="text"
+                  required
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  placeholder="Captain Alexander Vance"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all font-normal"
+                />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
                   2. Position
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs">💼</span>
-                  <input
-                    type="text"
-                    value={formData.position}
-                    onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                    placeholder="e.g. Fleet Director / Chief Executive"
-                    className="w-full pl-10 pr-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all placeholder-zinc-400 font-normal"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={formData.position}
+                  onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                  placeholder="Fleet Director / Chief Executive"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all font-normal"
+                />
               </div>
             </div>
 
             {/* Row 2: 3. Email & 4. Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
-                  3. Email <span className="text-red-500">*</span>
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
+                  3. Email <span className="text-rose-400">*</span>
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs">✉</span>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="name@aviation-operator.com"
-                    className="w-full pl-10 pr-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all placeholder-zinc-400 font-normal"
-                  />
-                </div>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="name@aviation-operator.com"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all font-normal"
+                />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
                   4. Phone
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs">📞</span>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+1 (555) 019-2834"
-                    className="w-full pl-10 pr-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all placeholder-zinc-400 font-normal"
-                  />
-                </div>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+1 (555) 019-2834"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all font-normal"
+                />
               </div>
             </div>
 
             {/* Row 3: 5. WhatsApp / Signal & 6. Objective */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
                   5. WhatsApp / Signal
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs">💬</span>
-                  <input
-                    type="text"
-                    value={formData.whatsappSignal}
-                    onChange={(e) => setFormData({ ...formData, whatsappSignal: e.target.value })}
-                    placeholder="+1 (555) 019-2834 or handle"
-                    className="w-full pl-10 pr-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all placeholder-zinc-400 font-normal"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={formData.whatsappSignal}
+                  onChange={(e) => setFormData({ ...formData, whatsappSignal: e.target.value })}
+                  placeholder="+1 (555) 019-2834 or handle"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all font-normal"
+                />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
+                <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
                   6. Objective
                 </label>
                 <select
                   value={formData.objective}
                   onChange={(e) => setFormData({ ...formData, objective: e.target.value })}
-                  className="w-full px-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all font-normal"
+                  className="w-full px-4 py-3 sm:py-3.5 text-sm bg-zinc-900 border border-white/15 focus:border-white/50 text-white rounded-xl focus:outline-none transition-all font-normal"
                 >
                   <option value="M1 Marketplace Acquisition">M1 Marketplace Acquisition</option>
                   <option value="Aircraft Listings & Verification">Aircraft Listings & Verification</option>
@@ -232,29 +212,29 @@ export default function ContactSection() {
               </div>
             </div>
 
-            {/* Row 4: 7. Discription */}
+            {/* Row 4: 7. Description */}
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-zinc-700 block font-medium">
-                7. Discription
+              <label className="text-[11px] font-mono uppercase tracking-[0.18em] text-zinc-300 block font-semibold">
+                7. Description
               </label>
               <textarea
-                rows={4}
+                rows={3}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Specify your requirements, aircraft fleet, or inquiry details..."
-                className="w-full px-4 py-3.5 text-sm bg-zinc-100 border border-zinc-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all resize-none placeholder-zinc-400 font-normal"
+                placeholder="Specify your requirements, fleet composition, or inquiry details..."
+                className="w-full px-4 py-3 text-sm bg-white/[0.05] border border-white/15 focus:border-white/50 focus:bg-white/[0.08] text-white rounded-xl placeholder-zinc-500 focus:outline-none transition-all resize-none font-normal"
               />
             </div>
 
             {/* Dual Iconic Parallelogram CTAs (Submit & Book Meeting) */}
-            <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-5 border-t border-zinc-200">
+            <div className="pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
               <ParallelogramButton
                 onClick={() => {
                   const form = document.querySelector("form");
                   if (form) form.requestSubmit();
                 }}
                 variant="white"
-                className="w-full sm:w-auto text-xs py-4 px-8 border-zinc-400 hover:bg-zinc-100 shadow-md"
+                className="w-full sm:w-auto text-xs py-3.5 px-8 font-bold shadow-lg"
               >
                 {status === "submitting" ? "Transmitting..." : "Submit Inquiry"}
               </ParallelogramButton>
@@ -263,7 +243,7 @@ export default function ContactSection() {
                 href={CAL_BOOKING_URL}
                 isExternal={true}
                 variant="silver"
-                className="w-full sm:w-auto text-xs py-4 px-8 shadow-md"
+                className="w-full sm:w-auto text-xs py-3.5 px-8 font-bold shadow-lg"
               >
                 Book a Direct Meeting ↗
               </ParallelogramButton>

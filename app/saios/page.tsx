@@ -106,7 +106,10 @@ export default function SaiosPage() {
       <div className="absolute top-0 left-0 right-0 h-[1850px] pointer-events-none z-0 overflow-hidden">
         <video
           className="w-full h-full object-cover opacity-35"
-          src="/videos/hero.mp4"
+          src={
+            process.env.NEXT_PUBLIC_CLOUDINARY_HERO_VIDEO_URL ||
+            "https://res.cloudinary.com/gf2v9kfu/video/upload/v1794257278/m1-aviation/videos/hero.mp4"
+          }
           autoPlay
           muted
           loop
