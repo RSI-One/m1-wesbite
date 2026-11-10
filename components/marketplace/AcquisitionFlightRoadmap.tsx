@@ -485,12 +485,12 @@ export default function AcquisitionFlightRoadmap() {
   if (isMobile) {
     // Mobile View: Zoom in close so plane, platforms, and cards are prominent and large!
     // Camera dynamically follows the flying plane (jetX, jetY) from stage to stage
-    viewW = 900;
+    viewW = 820;
     viewH = viewW / aspect;
     // Camera centers horizontally on the flying jet during its entire flight path
     viewX = jetX - viewW / 2;
     // Camera centers vertically on the jet with gentle headroom for stage card above & platform below
-    viewY = Math.max(-200, Math.min(4500 - viewH, jetY - viewH * 0.44));
+    viewY = Math.max(-200, Math.min(4600 - viewH, jetY - viewH * 0.46));
   } else {
     // Desktop View: Original widescreen presentation
     const cameraY = Math.max(0, Math.min(3400, jetY - 520));
@@ -667,7 +667,9 @@ export default function AcquisitionFlightRoadmap() {
           {(() => {
             const isActive = activeStepIndex === 0;
             const p1 = STEPS[0];
-            const cardBottom = 80 + 220; // card y=80, height=220 -> 300
+            const cardHeight = isMobile ? 320 : 240;
+            const cardTop = isMobile ? 60 : 70;
+            const cardBottom = cardTop + (isMobile ? cardHeight : 220);
             const platformTop = p1.y - 78; // reduced platform top rim -> 442
 
             return (
@@ -698,7 +700,7 @@ export default function AcquisitionFlightRoadmap() {
             const isActive = activeStepIndex === actualIdx;
             const platformSize = 280;
             const cardWidth = 540;
-            const cardHeight = 240;
+            const cardHeight = isMobile ? 320 : 240;
 
             let lineX1 = 0;
             let lineY1 = step.y;
@@ -707,7 +709,7 @@ export default function AcquisitionFlightRoadmap() {
 
             if (isMobile) {
               // On mobile, card is centered directly above platform: draw vertical leader line
-              const cardBottom = step.y - 420 + cardHeight; // step.y - 180
+              const cardBottom = (step.y - 510) + cardHeight; // step.y - 190
               const platformTop = step.y - 140; // top rim of square pad
               lineX1 = step.x;
               lineY1 = cardBottom;
@@ -760,7 +762,7 @@ export default function AcquisitionFlightRoadmap() {
             const isActive = activeStepIndex === 6;
             const p7 = STEPS[6];
             const platformBottom = p7.y + 78; // reduced platform bottom rim -> 4078
-            const cardTop = p7.y + 200; // top of card below platform -> 4200
+            const cardTop = isMobile ? (p7.y + 160) : (p7.y + 200);
 
             return (
               <g
@@ -920,14 +922,15 @@ export default function AcquisitionFlightRoadmap() {
             const p1 = STEPS[0];
             const theme = PHASE_THEMES[0];
             const isActive = activeStepIndex === 0;
-            const cardWidth = 600;
-            const cardHeight = 240;
-            const cardTop = 70;
+            const cardWidth = isMobile ? 720 : 600;
+            const cardHeight = isMobile ? 320 : 240;
+            const cardTop = isMobile ? 60 : 70;
+            const cardX = isMobile ? (p1.x - cardWidth / 2) : p1.cardX;
 
             return (
               <foreignObject
                 key="card-fo-01"
-                x={p1.cardX}
+                x={cardX}
                 y={cardTop}
                 width={cardWidth}
                 height={cardHeight}
@@ -936,7 +939,9 @@ export default function AcquisitionFlightRoadmap() {
               >
                 <div
                   onClick={() => jumpToStep(0)}
-                  className={`relative w-full h-full rounded-2xl border p-6 sm:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
+                  className={`relative w-full h-full rounded-2xl border ${
+                    isMobile ? "p-7" : "p-6 sm:p-7"
+                  } flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
                     isActive
                       ? `${theme.activeBorder} ${theme.activeBg} ${theme.activeShadow} scale-[1.02]`
                       : `${theme.inactiveBorder} ${theme.inactiveBg} shadow-[0_15px_35px_rgba(0,0,0,0.85)] opacity-85 hover:opacity-100 hover:scale-[1.01]`
@@ -964,12 +969,14 @@ export default function AcquisitionFlightRoadmap() {
                   <div className="relative z-10 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <span
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                          isActive ? theme.activeDot : "bg-zinc-500"
-                        }`}
+                        className={`rounded-full transition-all duration-300 ${
+                          isMobile ? "w-3.5 h-3.5" : "w-2.5 h-2.5"
+                        } ${isActive ? theme.activeDot : "bg-zinc-500"}`}
                       />
                       <span
-                        className={`px-2.5 py-0.5 rounded-md font-mono text-xs font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                        className={`rounded-md font-mono font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                          isMobile ? "px-3.5 py-1 text-sm" : "px-2.5 py-0.5 text-xs"
+                        } ${
                           isActive
                             ? `${theme.tagBg} shadow-sm`
                             : "bg-zinc-900/80 border-zinc-700/60 text-zinc-400"
@@ -978,30 +985,44 @@ export default function AcquisitionFlightRoadmap() {
                         PHASE 01
                       </span>
                     </div>
-                    <span className="font-mono text-xs sm:text-sm font-semibold text-zinc-400">
+                    <span className={`font-mono font-semibold text-zinc-400 ${
+                      isMobile ? "text-lg" : "text-xs sm:text-sm"
+                    }`}>
                       {p1.altitude}
                     </span>
                   </div>
 
                   {/* Title & Description */}
-                  <div className="relative z-10 space-y-1.5 my-auto">
+                  <div className={`relative z-10 my-auto ${isMobile ? "space-y-2.5" : "space-y-1.5"}`}>
                     <h3
-                      className={`text-xl sm:text-2xl font-light tracking-tight transition-colors line-clamp-1 ${
-                        isActive ? "text-white font-normal" : "text-zinc-200"
+                      className={`tracking-tight transition-colors line-clamp-1 ${
+                        isMobile
+                          ? "text-3xl font-medium text-white"
+                          : `text-xl sm:text-2xl font-light ${isActive ? "text-white font-normal" : "text-zinc-200"}`
                       }`}
                     >
                       {p1.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed line-clamp-2">
+                    <p className={`leading-relaxed text-zinc-300 ${
+                      isMobile
+                        ? "text-[18px] font-normal line-clamp-3"
+                        : "text-xs sm:text-sm font-light line-clamp-2"
+                    }`}>
                       {p1.description}
                     </p>
                   </div>
 
                   {/* Deliverable Footer */}
-                  <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono text-zinc-400">
+                  <div className={`relative z-10 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-zinc-400 ${
+                    isMobile ? "text-base" : "text-xs sm:text-sm"
+                  }`}>
                     <span>Deliverable:</span>
                     <span
-                      className={`font-semibold truncate max-w-[340px] px-2 py-0.5 rounded border transition-colors ${
+                      className={`font-semibold truncate rounded border transition-colors ${
+                        isMobile
+                          ? "max-w-[440px] px-3.5 py-1 text-base"
+                          : "max-w-[340px] px-2 py-0.5 text-xs sm:text-sm"
+                      } ${
                         isActive
                           ? `${theme.deliverableColor} ${theme.tagBg}`
                           : "text-zinc-300 border-transparent"
@@ -1021,9 +1042,9 @@ export default function AcquisitionFlightRoadmap() {
             const theme = PHASE_THEMES[actualIdx];
             const isCurrentActive = activeStepIndex === actualIdx;
             const isPast = activeStepIndex > actualIdx;
-            const cardWidth = 600;
-            const cardHeight = 240;
-            const cardTop = isMobile ? (step.y - 420) : (step.y - cardHeight / 2);
+            const cardWidth = isMobile ? 720 : 600;
+            const cardHeight = isMobile ? 320 : 240;
+            const cardTop = isMobile ? (step.y - 510) : (step.y - cardHeight / 2);
             const cardX = isMobile ? (step.x - cardWidth / 2) : step.cardX;
 
             return (
@@ -1038,7 +1059,9 @@ export default function AcquisitionFlightRoadmap() {
               >
                 <div
                   onClick={() => jumpToStep(actualIdx)}
-                  className={`relative w-full h-full rounded-2xl border p-6 sm:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
+                  className={`relative w-full h-full rounded-2xl border ${
+                    isMobile ? "p-7" : "p-6 sm:p-7"
+                  } flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
                     isCurrentActive
                       ? `${theme.activeBorder} ${theme.activeBg} ${theme.activeShadow} scale-[1.02]`
                       : isPast
@@ -1068,7 +1091,9 @@ export default function AcquisitionFlightRoadmap() {
                   <div className="relative z-10 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <span
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        className={`rounded-full transition-all duration-300 ${
+                          isMobile ? "w-3.5 h-3.5" : "w-2.5 h-2.5"
+                        } ${
                           isCurrentActive
                             ? theme.activeDot
                             : isPast
@@ -1077,7 +1102,9 @@ export default function AcquisitionFlightRoadmap() {
                         }`}
                       />
                       <span
-                        className={`px-2.5 py-0.5 rounded-md font-mono text-xs font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                        className={`rounded-md font-mono font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                          isMobile ? "px-3.5 py-1 text-sm" : "px-2.5 py-0.5 text-xs"
+                        } ${
                           isCurrentActive
                             ? `${theme.tagBg} shadow-sm`
                             : "bg-zinc-900/80 border-zinc-700/60 text-zinc-400"
@@ -1087,30 +1114,44 @@ export default function AcquisitionFlightRoadmap() {
                       </span>
                     </div>
 
-                    <span className="font-mono text-xs sm:text-sm font-semibold text-zinc-400">
+                    <span className={`font-mono font-semibold text-zinc-400 ${
+                      isMobile ? "text-lg" : "text-xs sm:text-sm"
+                    }`}>
                       {step.altitude}
                     </span>
                   </div>
 
                   {/* Title & Description */}
-                  <div className="relative z-10 space-y-1.5 my-auto">
+                  <div className={`relative z-10 my-auto ${isMobile ? "space-y-2.5" : "space-y-1.5"}`}>
                     <h3
-                      className={`text-xl sm:text-2xl font-light tracking-tight transition-colors line-clamp-1 ${
-                        isCurrentActive ? "text-white font-normal" : "text-zinc-200"
+                      className={`tracking-tight transition-colors line-clamp-1 ${
+                        isMobile
+                          ? "text-3xl font-medium text-white"
+                          : `text-xl sm:text-2xl font-light ${isCurrentActive ? "text-white font-normal" : "text-zinc-200"}`
                       }`}
                     >
                       {step.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed line-clamp-2">
+                    <p className={`leading-relaxed text-zinc-300 ${
+                      isMobile
+                        ? "text-[18px] font-normal line-clamp-3"
+                        : "text-xs sm:text-sm font-light line-clamp-2"
+                    }`}>
                       {step.description}
                     </p>
                   </div>
 
                   {/* Minimalist Deliverable Footer */}
-                  <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono text-zinc-400">
+                  <div className={`relative z-10 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-zinc-400 ${
+                    isMobile ? "text-base" : "text-xs sm:text-sm"
+                  }`}>
                     <span>Deliverable:</span>
                     <span
-                      className={`font-semibold truncate max-w-[340px] px-2 py-0.5 rounded border transition-colors ${
+                      className={`font-semibold truncate rounded border transition-colors ${
+                        isMobile
+                          ? "max-w-[440px] px-3.5 py-1 text-base"
+                          : "max-w-[340px] px-2 py-0.5 text-xs sm:text-sm"
+                      } ${
                         isCurrentActive
                           ? `${theme.deliverableColor} ${theme.tagBg}`
                           : "text-zinc-300 border-transparent"
@@ -1129,14 +1170,15 @@ export default function AcquisitionFlightRoadmap() {
             const p7 = STEPS[6];
             const theme = PHASE_THEMES[6];
             const isActive = activeStepIndex === 6;
-            const cardWidth = 600;
-            const cardHeight = 240;
-            const cardTop = p7.y + 190; // Positioned directly below platform 07
+            const cardWidth = isMobile ? 720 : 600;
+            const cardHeight = isMobile ? 320 : 240;
+            const cardX = isMobile ? (p7.x - cardWidth / 2) : p7.cardX;
+            const cardTop = isMobile ? (p7.y + 160) : (p7.y + 190);
 
             return (
               <foreignObject
                 key="card-fo-07"
-                x={p7.cardX}
+                x={cardX}
                 y={cardTop}
                 width={cardWidth}
                 height={cardHeight}
@@ -1145,7 +1187,9 @@ export default function AcquisitionFlightRoadmap() {
               >
                 <div
                   onClick={() => jumpToStep(6)}
-                  className={`relative w-full h-full rounded-2xl border p-6 sm:p-7 flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
+                  className={`relative w-full h-full rounded-2xl border ${
+                    isMobile ? "p-7" : "p-6 sm:p-7"
+                  } flex flex-col justify-between cursor-pointer transition-all duration-300 select-none overflow-hidden backdrop-blur-md ${
                     isActive
                       ? `${theme.activeBorder} ${theme.activeBg} ${theme.activeShadow} scale-[1.02]`
                       : `${theme.inactiveBorder} ${theme.inactiveBg} shadow-[0_15px_35px_rgba(0,0,0,0.85)] opacity-85 hover:opacity-100 hover:scale-[1.01]`
@@ -1173,12 +1217,14 @@ export default function AcquisitionFlightRoadmap() {
                   <div className="relative z-10 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <span
-                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                          isActive ? theme.activeDot : "bg-slate-400"
-                        }`}
+                        className={`rounded-full transition-all duration-300 ${
+                          isMobile ? "w-3.5 h-3.5" : "w-2.5 h-2.5"
+                        } ${isActive ? theme.activeDot : "bg-slate-400"}`}
                       />
                       <span
-                        className={`px-2.5 py-0.5 rounded-md font-mono text-xs font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                        className={`rounded-md font-mono font-bold tracking-[0.2em] uppercase border transition-all duration-300 ${
+                          isMobile ? "px-3.5 py-1 text-sm" : "px-2.5 py-0.5 text-xs"
+                        } ${
                           isActive
                             ? `${theme.tagBg} shadow-sm`
                             : "bg-zinc-900/80 border-zinc-700/60 text-zinc-400"
@@ -1187,30 +1233,44 @@ export default function AcquisitionFlightRoadmap() {
                         PHASE 07
                       </span>
                     </div>
-                    <span className="font-mono text-xs sm:text-sm font-semibold text-zinc-400">
+                    <span className={`font-mono font-semibold text-zinc-400 ${
+                      isMobile ? "text-lg" : "text-xs sm:text-sm"
+                    }`}>
                       {p7.altitude}
                     </span>
                   </div>
 
                   {/* Title & Description */}
-                  <div className="relative z-10 space-y-1.5 my-auto">
+                  <div className={`relative z-10 my-auto ${isMobile ? "space-y-2.5" : "space-y-1.5"}`}>
                     <h3
-                      className={`text-xl sm:text-2xl font-light tracking-tight transition-colors line-clamp-1 ${
-                        isActive ? "text-white font-normal" : "text-zinc-200"
+                      className={`tracking-tight transition-colors line-clamp-1 ${
+                        isMobile
+                          ? "text-3xl font-medium text-white"
+                          : `text-xl sm:text-2xl font-light ${isActive ? "text-white font-normal" : "text-zinc-200"}`
                       }`}
                     >
                       {p7.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed line-clamp-2">
+                    <p className={`leading-relaxed text-zinc-300 ${
+                      isMobile
+                        ? "text-[18px] font-normal line-clamp-3"
+                        : "text-xs sm:text-sm font-light line-clamp-2"
+                    }`}>
                       {p7.description}
                     </p>
                   </div>
 
                   {/* Deliverable Footer */}
-                  <div className="relative z-10 pt-3 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm font-mono text-zinc-400">
+                  <div className={`relative z-10 pt-3 border-t border-white/10 flex items-center justify-between font-mono text-zinc-400 ${
+                    isMobile ? "text-base" : "text-xs sm:text-sm"
+                  }`}>
                     <span>Deliverable:</span>
                     <span
-                      className={`font-semibold truncate max-w-[340px] px-2 py-0.5 rounded border transition-colors ${
+                      className={`font-semibold truncate rounded border transition-colors ${
+                        isMobile
+                          ? "max-w-[440px] px-3.5 py-1 text-base"
+                          : "max-w-[340px] px-2 py-0.5 text-xs sm:text-sm"
+                      } ${
                         isActive
                           ? `${theme.deliverableColor} ${theme.tagBg}`
                           : "text-zinc-300 border-transparent"
