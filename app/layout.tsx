@@ -405,6 +405,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preload critical LCP logo for instant discovery (< 0.5s) */}
+        <link rel="preload" as="image" href="/m1-logo.png" fetchPriority="high" type="image/png" />
         {/* Preconnect & DNS-Prefetch to Cloudinary Edge CDN for sub-second asset delivery */}
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />

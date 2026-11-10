@@ -179,16 +179,24 @@ export default function OurLineup() {
 
   useEffect(() => {
     let animId: number;
+    let scrollScheduled = false;
 
     const handleScroll = () => {
-      if (!trackRef.current) return;
-      const rect = trackRef.current.getBoundingClientRect();
-      const viewH = window.innerHeight;
-      const totalDistance = rect.height - viewH;
-      if (totalDistance <= 0) return;
-
-      const rawProgress = -rect.top / totalDistance;
-      targetProgressRef.current = Math.max(0, Math.min(1, rawProgress));
+      if (!scrollScheduled) {
+        scrollScheduled = true;
+        requestAnimationFrame(() => {
+          if (trackRef.current) {
+            const rect = trackRef.current.getBoundingClientRect();
+            const viewH = window.innerHeight;
+            const totalDistance = rect.height - viewH;
+            if (totalDistance > 0) {
+              const rawProgress = -rect.top / totalDistance;
+              targetProgressRef.current = Math.max(0, Math.min(1, rawProgress));
+            }
+          }
+          scrollScheduled = false;
+        });
+      }
     };
 
     const playDebouncedSound = (cardIndex: number) => {

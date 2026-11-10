@@ -1,14 +1,17 @@
+import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
-import OurLineup from "@/components/home/OurLineup";
-import FullStackDeck from "@/components/home/FullStackDeck";
-import AviGramSection from "@/components/home/AviGramSection";
-import OneLiner from "@/components/home/OneLiner";
-import PartnerStrip from "@/components/home/PartnerStrip";
-import VisionTimeline from "@/components/home/VisionTimeline";
-import ScrollFlightJet from "@/components/home/ScrollFlightJet";
-import ContactSection from "@/components/home/ContactSection";
 import SectionFocusItem from "@/components/home/SectionFocusItem";
 import SectionDivider from "@/components/home/SectionDivider";
+
+// ── Below-the-fold components dynamically code-split for sub-second initial load & reduced JS payload ──
+const OurLineup = dynamic(() => import("@/components/home/OurLineup"));
+const FullStackDeck = dynamic(() => import("@/components/home/FullStackDeck"), { ssr: false });
+const AviGramSection = dynamic(() => import("@/components/home/AviGramSection"));
+const ScrollFlightJet = dynamic(() => import("@/components/home/ScrollFlightJet"), { ssr: false });
+const OneLiner = dynamic(() => import("@/components/home/OneLiner"));
+const PartnerStrip = dynamic(() => import("@/components/home/PartnerStrip"));
+const VisionTimeline = dynamic(() => import("@/components/home/VisionTimeline"));
+const ContactSection = dynamic(() => import("@/components/home/ContactSection"));
 
 export default function Home() {
   return (

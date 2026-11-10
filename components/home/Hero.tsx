@@ -7,14 +7,21 @@ export default function Hero({ paused = false }: { paused?: boolean }) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const videoRef   = useRef<HTMLVideoElement>(null);
 
-  // ── Scroll → fade away / fade to black transition ──────────────────────────
+  // ── Scroll → fade away / fade to black transition (Buffered in RAF to prevent forced reflow) ──
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      const progress = Math.min(Math.max((scrollY - vh * 0.1) / (vh * 0.7), 0), 1);
-      if (overlayRef.current) {
-        overlayRef.current.style.opacity = String(progress);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const vh = window.innerHeight;
+          const progress = Math.min(Math.max((scrollY - vh * 0.1) / (vh * 0.7), 0), 1);
+          if (overlayRef.current) {
+            overlayRef.current.style.opacity = String(progress);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -92,7 +99,7 @@ export default function Hero({ paused = false }: { paused?: boolean }) {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-hidden="true"
       />
 
@@ -120,6 +127,7 @@ export default function Hero({ paused = false }: { paused?: boolean }) {
             width={1302}
             height={461}
             priority
+            fetchPriority="high"
             className="w-full h-auto object-contain opacity-90 hover:opacity-100 transition-opacity drop-shadow-[0_0_50px_rgba(255,255,255,0.18)]"
           />
         </div>
