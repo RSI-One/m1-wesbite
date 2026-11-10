@@ -286,6 +286,26 @@ body {
   will-change: transform;
 }
 
+/* Acquisition Roadmap Flagship Supersonic Jet (Phase 07) Continuous Air Floating Hover */
+@keyframes flagshipJetAirHover {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  35% {
+    transform: translateY(-14px) rotate(-0.75deg);
+  }
+  70% {
+    transform: translateY(5px) rotate(0.4deg);
+  }
+}
+
+.flagship-hover-float {
+  animation: flagshipJetAirHover 4.4s ease-in-out infinite;
+  transform-origin: center center;
+  transform-box: fill-box;
+  will-change: transform;
+}
+
 /* Hide Next.js dev overlay indicator and logo from bottom left of screen */
 nextjs-portal,
 [data-nextjs-toast],

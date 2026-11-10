@@ -1320,21 +1320,23 @@ export default function AcquisitionFlightRoadmap() {
                 transform={`rotate(${dynamicRotate}) scale(${dynamicScaleX}, 1)`}
                 className="transition-all duration-150"
               >
-                {/* Aircraft Body Image */}
-                <image
-                  href={STEPS[displayJetIndex].image}
-                  x={-currentJetConfig.width / 2 + currentJetConfig.xOffset}
-                  y={-currentJetConfig.height / 2 + currentJetConfig.yOffset}
-                  width={currentJetConfig.width}
-                  height={currentJetConfig.height}
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{
-                    filter:
-                      displayJetIndex === 6
-                        ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
-                        : "drop-shadow(0 20px 40px rgba(0,0,0,0.85))",
-                  }}
-                />
+                {/* Aircraft Body Image with Continuous Atmospheric Floating Hover for Phase 07 */}
+                <g className={displayJetIndex === 6 && isFlying < 0.15 ? "flagship-hover-float" : ""}>
+                  <image
+                    href={STEPS[displayJetIndex].image}
+                    x={-currentJetConfig.width / 2 + currentJetConfig.xOffset}
+                    y={-currentJetConfig.height / 2 + currentJetConfig.yOffset}
+                    width={currentJetConfig.width}
+                    height={currentJetConfig.height}
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{
+                      filter:
+                        displayJetIndex === 6
+                          ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
+                          : "drop-shadow(0 20px 40px rgba(0,0,0,0.85))",
+                    }}
+                  />
+                </g>
 
                 {/* ── Proper Dynamic Supersonic Slipstream Air Flying Lines (Moving Continuously like Ecosystem/Contact) ── */}
                 {isFlying > 0.03 && (
@@ -1418,20 +1420,22 @@ export default function AcquisitionFlightRoadmap() {
                       transform={`rotate(${nextRotate}) scale(${nextScaleX}, 1)`}
                       style={{ opacity: nextPlaneOpacity }}
                     >
-                      <image
-                        href={STEPS[nextIdx].image}
-                        x={-nextConfig.width / 2 + nextConfig.xOffset}
-                        y={-nextConfig.height / 2 + nextConfig.yOffset}
-                        width={nextConfig.width}
-                        height={nextConfig.height}
-                        preserveAspectRatio="xMidYMid meet"
-                        style={{
-                          filter:
-                            nextIdx === 6
-                              ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
-                              : `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
-                        }}
-                      />
+                      <g className={nextIdx === 6 ? "flagship-hover-float" : ""}>
+                        <image
+                          href={STEPS[nextIdx].image}
+                          x={-nextConfig.width / 2 + nextConfig.xOffset}
+                          y={-nextConfig.height / 2 + nextConfig.yOffset}
+                          width={nextConfig.width}
+                          height={nextConfig.height}
+                          preserveAspectRatio="xMidYMid meet"
+                          style={{
+                            filter:
+                              nextIdx === 6
+                                ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
+                                : `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
+                          }}
+                        />
+                      </g>
                     </g>
                   );
                 })()}
