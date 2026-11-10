@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import SectionFocusItem from "@/components/home/SectionFocusItem";
