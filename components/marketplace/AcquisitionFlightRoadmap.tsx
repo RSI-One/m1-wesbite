@@ -471,11 +471,24 @@ export default function AcquisitionFlightRoadmap() {
     }
   }
 
-  const currentDisplayStep = STEPS[displayJetIndex];
-  const currentJetConfig = JET_CONFIGS[displayJetIndex];
-
   // Camera tracking: Smoothly centers the active zone vertically with plenty of headroom for P01 and P07
   const isMobile = viewportSize.w < 1024;
+
+  // Responsive jet dimensions: 18% size increase for the last flagship jet (Phase 07) in PC view
+  const getJetConfig = (idx: number) => {
+    const base = JET_CONFIGS[idx];
+    if (idx === 6 && !isMobile) {
+      return {
+        ...base,
+        width: 1040,
+        height: 580,
+      };
+    }
+    return base;
+  };
+
+  const currentDisplayStep = STEPS[displayJetIndex];
+  const currentJetConfig = getJetConfig(displayJetIndex);
   const aspect = viewportSize.w / Math.max(1, viewportSize.h);
   let viewW = 1920;
   let viewH = 1080;
@@ -667,9 +680,9 @@ export default function AcquisitionFlightRoadmap() {
           {(() => {
             const isActive = activeStepIndex === 0;
             const p1 = STEPS[0];
-            const cardHeight = isMobile ? 420 : 240;
-            const cardTop = isMobile ? -20 : 70;
-            const cardBottom = cardTop + (isMobile ? cardHeight : 220);
+            const cardHeight = isMobile ? 420 : 250;
+            const cardTop = isMobile ? -20 : 65;
+            const cardBottom = cardTop + cardHeight;
             const platformTop = p1.y - 78; // reduced platform top rim -> 442
 
             return (
@@ -699,8 +712,8 @@ export default function AcquisitionFlightRoadmap() {
             const actualIdx = idx + 1;
             const isActive = activeStepIndex === actualIdx;
             const platformSize = 280;
-            const cardWidth = 540;
-            const cardHeight = isMobile ? 420 : 240;
+            const cardWidth = isMobile ? 740 : 624;
+            const cardHeight = isMobile ? 420 : 250;
 
             let lineX1 = 0;
             let lineY1 = step.y;
@@ -922,10 +935,10 @@ export default function AcquisitionFlightRoadmap() {
             const p1 = STEPS[0];
             const theme = PHASE_THEMES[0];
             const isActive = activeStepIndex === 0;
-            const cardWidth = isMobile ? 740 : 600;
-            const cardHeight = isMobile ? 420 : 240;
-            const cardTop = isMobile ? -20 : 70;
-            const cardX = isMobile ? (p1.x - cardWidth / 2) : p1.cardX;
+            const cardWidth = isMobile ? 740 : 624;
+            const cardHeight = isMobile ? 420 : 250;
+            const cardTop = isMobile ? -20 : 65;
+            const cardX = p1.x - cardWidth / 2;
 
             return (
               <foreignObject
@@ -1042,8 +1055,8 @@ export default function AcquisitionFlightRoadmap() {
             const theme = PHASE_THEMES[actualIdx];
             const isCurrentActive = activeStepIndex === actualIdx;
             const isPast = activeStepIndex > actualIdx;
-            const cardWidth = isMobile ? 740 : 600;
-            const cardHeight = isMobile ? 420 : 240;
+            const cardWidth = isMobile ? 740 : 624;
+            const cardHeight = isMobile ? 420 : 250;
             const cardTop = isMobile ? (step.y - 600) : (step.y - cardHeight / 2);
             const cardX = isMobile ? (step.x - cardWidth / 2) : step.cardX;
 
@@ -1170,9 +1183,9 @@ export default function AcquisitionFlightRoadmap() {
             const p7 = STEPS[6];
             const theme = PHASE_THEMES[6];
             const isActive = activeStepIndex === 6;
-            const cardWidth = isMobile ? 740 : 600;
-            const cardHeight = isMobile ? 420 : 240;
-            const cardX = isMobile ? (p7.x - cardWidth / 2) : p7.cardX;
+            const cardWidth = isMobile ? 740 : 624;
+            const cardHeight = isMobile ? 420 : 250;
+            const cardX = p7.x - cardWidth / 2;
             const cardTop = isMobile ? (p7.y + 130) : (p7.y + 190);
 
             return (
@@ -1375,47 +1388,53 @@ export default function AcquisitionFlightRoadmap() {
               // ── Touchdown & Gentle Shining Metamorphosis (Zero Twisting, Pure Shining Effect) ──
               <>
                 {/* Incoming Aircraft (fades out in its arrival flight orientation) */}
-                {prevPlaneOpacity > 0.01 && (
-                  <g
-                    transform={`rotate(${prevRotate}) scale(${prevScaleX}, 1)`}
-                    style={{ opacity: prevPlaneOpacity }}
-                  >
-                    <image
-                      href={STEPS[currentSegment].image}
-                      x={-JET_CONFIGS[currentSegment].width / 2 + JET_CONFIGS[currentSegment].xOffset}
-                      y={-JET_CONFIGS[currentSegment].height / 2 + JET_CONFIGS[currentSegment].yOffset}
-                      width={JET_CONFIGS[currentSegment].width}
-                      height={JET_CONFIGS[currentSegment].height}
-                      preserveAspectRatio="xMidYMid meet"
-                      style={{
-                        filter: `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
-                      }}
-                    />
-                  </g>
-                )}
+                {prevPlaneOpacity > 0.01 && (() => {
+                  const prevConfig = getJetConfig(currentSegment);
+                  return (
+                    <g
+                      transform={`rotate(${prevRotate}) scale(${prevScaleX}, 1)`}
+                      style={{ opacity: prevPlaneOpacity }}
+                    >
+                      <image
+                        href={STEPS[currentSegment].image}
+                        x={-prevConfig.width / 2 + prevConfig.xOffset}
+                        y={-prevConfig.height / 2 + prevConfig.yOffset}
+                        width={prevConfig.width}
+                        height={prevConfig.height}
+                        preserveAspectRatio="xMidYMid meet"
+                        style={{
+                          filter: `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
+                        }}
+                      />
+                    </g>
+                  );
+                })()}
 
                 {/* Upgraded Next Phase Aircraft (emerges already in its departure direction!) */}
-                {nextPlaneOpacity > 0.01 && (
-                  <g
-                    transform={`rotate(${nextRotate}) scale(${nextScaleX}, 1)`}
-                    style={{ opacity: nextPlaneOpacity }}
-                  >
-                    <image
-                      href={STEPS[nextIdx].image}
-                      x={-JET_CONFIGS[nextIdx].width / 2 + JET_CONFIGS[nextIdx].xOffset}
-                      y={-JET_CONFIGS[nextIdx].height / 2 + JET_CONFIGS[nextIdx].yOffset}
-                      width={JET_CONFIGS[nextIdx].width}
-                      height={JET_CONFIGS[nextIdx].height}
-                      preserveAspectRatio="xMidYMid meet"
-                      style={{
-                        filter:
-                          nextIdx === 6
-                            ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
-                            : `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
-                      }}
-                    />
-                  </g>
-                )}
+                {nextPlaneOpacity > 0.01 && (() => {
+                  const nextConfig = getJetConfig(nextIdx);
+                  return (
+                    <g
+                      transform={`rotate(${nextRotate}) scale(${nextScaleX}, 1)`}
+                      style={{ opacity: nextPlaneOpacity }}
+                    >
+                      <image
+                        href={STEPS[nextIdx].image}
+                        x={-nextConfig.width / 2 + nextConfig.xOffset}
+                        y={-nextConfig.height / 2 + nextConfig.yOffset}
+                        width={nextConfig.width}
+                        height={nextConfig.height}
+                        preserveAspectRatio="xMidYMid meet"
+                        style={{
+                          filter:
+                            nextIdx === 6
+                              ? "drop-shadow(0 0 35px rgba(255,255,255,0.85)) drop-shadow(0 15px 35px rgba(0,0,0,0.95))"
+                              : `drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 ${transformLight * 30}px rgba(255,255,255,${transformLight * 0.9}))`,
+                        }}
+                      />
+                    </g>
+                  );
+                })()}
 
                 {/* ── Pure Shining Light Transformation Effect (Zero Dotted Orbital Lines) ── */}
                 {transformLight > 0.02 && (
