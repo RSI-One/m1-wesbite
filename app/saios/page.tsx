@@ -150,18 +150,18 @@ export default function SaiosPage() {
       </section>
 
       {/* ── 2. Motherboard 6 Core Functions Section ───────────────────────── */}
-      <section id="functions" className="relative z-10 py-32 px-6 md:px-12 max-w-6xl mx-auto w-full">
-        <div className="text-center mb-16 space-y-2">
-          <span className="text-xs font-mono uppercase tracking-[0.25em] text-zinc-400">
+      <section id="functions" className="relative z-10 py-16 sm:py-24 md:py-32 px-4 sm:px-6 md:px-12 max-w-6xl mx-auto w-full">
+        <div className="text-center mb-10 sm:mb-16 space-y-2">
+          <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-zinc-400">
             Avionics Neural Architecture
           </span>
-          <h2 className="text-3xl sm:text-5xl font-light tracking-tight text-white">
+          <h2 className="text-2xl sm:text-5xl font-light tracking-tight text-white">
             6 Core Functions
           </h2>
         </div>
 
         {/* Semi-transparent Grey Motherboard Background Container */}
-        <div className="relative rounded-3xl border border-zinc-800 bg-zinc-950/75 backdrop-blur-xl p-8 sm:p-12 md:p-16 overflow-hidden shadow-2xl">
+        <div className="relative rounded-2xl sm:rounded-3xl border border-zinc-800 bg-zinc-950/75 backdrop-blur-xl p-4 sm:p-10 md:p-16 overflow-hidden shadow-2xl">
           {/* Motherboard Circuit Trace SVG Graphic Background */}
           <div className="absolute inset-0 pointer-events-none opacity-20">
             <svg className="w-full h-full" viewBox="0 0 1000 600" fill="none" stroke="#a1a1aa" strokeWidth="1">

@@ -167,44 +167,43 @@ export default function EnergyGrid() {
       />
 
       {/* Row 1: cards 0–2 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8 mb-4 sm:mb-8">
         {CORE_FUNCTIONS.slice(0, 3).map((func, i) => (
           <div
             key={func.num}
             ref={el => { cardRefs.current[i] = el; }}
-            className="group p-7 rounded-2xl border border-zinc-800/90 bg-zinc-900/60 hover:bg-zinc-800/80 hover:border-zinc-500/60 transition-all duration-300 shadow-lg relative overflow-hidden"
+            className="group p-4 sm:p-5 md:p-7 rounded-xl sm:rounded-2xl border border-zinc-800/90 bg-zinc-900/60 hover:bg-zinc-800/80 hover:border-zinc-500/60 transition-all duration-300 shadow-lg relative overflow-hidden"
           >
-            <div className="flex items-center mb-5">
+            <div className="flex items-center mb-2.5 sm:mb-5">
               {/* Tilted sharp-edge parallelogram badge */}
-              <div className="-skew-x-12 inline-flex items-center px-4 py-1.5 bg-zinc-950 border border-zinc-600 shadow-[inset_0_0_8px_rgba(255,255,255,0.05)]">
-                <span className="skew-x-12 text-[11px] font-black font-mono tracking-[0.22em] uppercase text-zinc-200">
+              <div className="-skew-x-12 inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 bg-zinc-950 border border-zinc-600 shadow-[inset_0_0_8px_rgba(255,255,255,0.05)]">
+                <span className="skew-x-12 text-[10px] sm:text-[11px] font-black font-mono tracking-[0.22em] uppercase text-zinc-200">
                   S-{func.num}
                 </span>
               </div>
             </div>
-            <h3 className="text-xl font-medium text-white mb-2.5">{func.title}</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">{func.desc}</p>
+            <h3 className="text-base sm:text-xl font-medium text-white mb-1.5 sm:mb-2.5">{func.title}</h3>
+            <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed">{func.desc}</p>
           </div>
         ))}
       </div>
 
       {/* Center Energy Source */}
-      <div className="flex justify-center items-center py-6 relative">
+      <div className="flex justify-center items-center py-3 sm:py-6 relative">
         {/* Outer pulsing rings — white */}
-        <div className="absolute w-28 h-28 rounded-full border border-white/20 animate-ping" style={{ animationDuration: "2.4s" }} />
-        <div className="absolute w-20 h-20 rounded-full border border-white/30 animate-ping" style={{ animationDuration: "1.8s", animationDelay: "0.4s" }} />
+        <div className="absolute w-20 sm:w-28 h-20 sm:h-28 rounded-full border border-white/20 animate-ping" style={{ animationDuration: "2.4s" }} />
+        <div className="absolute w-16 sm:w-20 h-16 sm:h-20 rounded-full border border-white/30 animate-ping" style={{ animationDuration: "1.8s", animationDelay: "0.4s" }} />
         {/* Ambient glow — white */}
-        <div className="absolute w-36 h-36 rounded-full bg-white/8 blur-2xl" />
+        <div className="absolute w-28 sm:w-36 h-28 sm:h-36 rounded-full bg-white/8 blur-2xl" />
         {/* Core node */}
         <div
           ref={coreRef}
-          className="relative w-16 h-16 rounded-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-zinc-400/70 flex items-center justify-center shadow-[0_0_35px_rgba(255,255,255,0.35),inset_0_0_16px_rgba(255,255,255,0.08)] z-10"
+          className="relative w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-gradient-to-br from-zinc-800 via-zinc-900 to-black border border-zinc-400/70 flex items-center justify-center shadow-[0_0_35px_rgba(255,255,255,0.35),inset_0_0_16px_rgba(255,255,255,0.08)] z-10"
         >
           {/* Capital S — white */}
           <span
-            className="text-white font-serif font-bold select-none"
+            className="text-white font-serif font-bold select-none text-xl sm:text-[1.75rem]"
             style={{
-              fontSize: "1.75rem",
               lineHeight: 1,
               textShadow: "0 0 20px rgba(255,255,255,0.95), 0 0 8px rgba(255,255,255,0.5)",
               letterSpacing: "-0.02em",
@@ -218,23 +217,23 @@ export default function EnergyGrid() {
       </div>
 
       {/* Row 2: cards 3–5 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8 mt-4 sm:mt-8">
         {CORE_FUNCTIONS.slice(3).map((func, i) => (
           <div
             key={func.num}
             ref={el => { cardRefs.current[i + 3] = el; }}
-            className="group p-7 rounded-2xl border border-zinc-800/90 bg-zinc-900/60 hover:bg-zinc-800/80 hover:border-zinc-500/60 transition-all duration-300 shadow-lg relative overflow-hidden"
+            className="group p-4 sm:p-5 md:p-7 rounded-xl sm:rounded-2xl border border-zinc-800/90 bg-zinc-900/60 hover:bg-zinc-800/80 hover:border-zinc-500/60 transition-all duration-300 shadow-lg relative overflow-hidden"
           >
-            <div className="flex items-center mb-5">
+            <div className="flex items-center mb-2.5 sm:mb-5">
               {/* Tilted sharp-edge parallelogram badge */}
-              <div className="-skew-x-12 inline-flex items-center px-4 py-1.5 bg-zinc-950 border border-zinc-600 shadow-[inset_0_0_8px_rgba(255,255,255,0.05)]">
-                <span className="skew-x-12 text-[11px] font-black font-mono tracking-[0.22em] uppercase text-zinc-200">
+              <div className="-skew-x-12 inline-flex items-center px-3 py-1 sm:px-4 sm:py-1.5 bg-zinc-950 border border-zinc-600 shadow-[inset_0_0_8px_rgba(255,255,255,0.05)]">
+                <span className="skew-x-12 text-[10px] sm:text-[11px] font-black font-mono tracking-[0.22em] uppercase text-zinc-200">
                   S-{func.num}
                 </span>
               </div>
             </div>
-            <h3 className="text-xl font-medium text-white mb-2.5">{func.title}</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed">{func.desc}</p>
+            <h3 className="text-base sm:text-xl font-medium text-white mb-1.5 sm:mb-2.5">{func.title}</h3>
+            <p className="text-[11px] sm:text-xs text-zinc-400 leading-relaxed">{func.desc}</p>
           </div>
         ))}
       </div>

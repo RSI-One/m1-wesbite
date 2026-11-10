@@ -255,7 +255,12 @@ export default function AcquisitionFlightRoadmap() {
   const [smoothProgress, setSmoothProgress] = useState(0);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const prevStepRef = useRef(0);
-  const [viewportSize, setViewportSize] = useState({ w: 1920, h: 1080 });
+  const [viewportSize, setViewportSize] = useState(() => {
+    if (typeof window !== "undefined") {
+      return { w: window.innerWidth, h: window.innerHeight };
+    }
+    return { w: 1920, h: 1080 };
+  });
 
   // Physics lerp loop refs for fluid, non-snapping 60fps/120fps motion (inspired by ContactFlightJet)
   const targetProgressRef = useRef(0);
@@ -470,23 +475,34 @@ export default function AcquisitionFlightRoadmap() {
   const currentJetConfig = JET_CONFIGS[displayJetIndex];
 
   // Camera tracking: Smoothly centers the active zone vertically with plenty of headroom for P01 and P07
-  const cameraY = Math.max(0, Math.min(3400, jetY - 520));
-
-  // Responsive SVG viewBox computation to prevent ANY clipping
+  const isMobile = viewportSize.w < 1024;
   const aspect = viewportSize.w / Math.max(1, viewportSize.h);
   let viewW = 1920;
   let viewH = 1080;
   let viewX = 0;
-  let viewY = cameraY;
+  let viewY = 0;
 
-  if (aspect >= 1920 / 1080) {
-    viewW = 1080 * aspect;
-    viewX = (1920 - viewW) / 2;
-    viewY = cameraY;
+  if (isMobile) {
+    // Mobile View: Zoom in close so plane, platforms, and cards are prominent and large!
+    // Camera dynamically follows the flying plane (jetX, jetY) from stage to stage
+    viewW = 900;
+    viewH = viewW / aspect;
+    // Camera centers horizontally on the flying jet during its entire flight path
+    viewX = jetX - viewW / 2;
+    // Camera centers vertically on the jet with gentle headroom for stage card above & platform below
+    viewY = Math.max(-200, Math.min(4500 - viewH, jetY - viewH * 0.44));
   } else {
-    viewH = 1920 / aspect;
-    viewX = 0;
-    viewY = cameraY - (viewH - 1080) / 2;
+    // Desktop View: Original widescreen presentation
+    const cameraY = Math.max(0, Math.min(3400, jetY - 520));
+    if (aspect >= 1920 / 1080) {
+      viewW = 1080 * aspect;
+      viewX = (1920 - viewW) / 2;
+      viewY = cameraY;
+    } else {
+      viewH = 1920 / aspect;
+      viewX = 0;
+      viewY = cameraY - (viewH - 1080) / 2;
+    }
   }
 
   // ── Depth-of-Field Blur Helper for Previous & Next Phases ──
@@ -682,16 +698,29 @@ export default function AcquisitionFlightRoadmap() {
             const isActive = activeStepIndex === actualIdx;
             const platformSize = 280;
             const cardWidth = 540;
+            const cardHeight = 240;
 
             let lineX1 = 0;
+            let lineY1 = step.y;
             let lineX2 = 0;
+            let lineY2 = step.y;
 
-            if (step.cardSide === "left") {
-              lineX1 = step.cardX + cardWidth;
-              lineX2 = step.x - platformSize / 2;
+            if (isMobile) {
+              // On mobile, card is centered directly above platform: draw vertical leader line
+              const cardBottom = step.y - 420 + cardHeight; // step.y - 180
+              const platformTop = step.y - 140; // top rim of square pad
+              lineX1 = step.x;
+              lineY1 = cardBottom;
+              lineX2 = step.x;
+              lineY2 = platformTop;
             } else {
-              lineX1 = step.x + platformSize / 2;
-              lineX2 = step.cardX;
+              if (step.cardSide === "left") {
+                lineX1 = step.cardX + cardWidth;
+                lineX2 = step.x - platformSize / 2;
+              } else {
+                lineX1 = step.x + platformSize / 2;
+                lineX2 = step.cardX;
+              }
             }
 
             return (
@@ -702,23 +731,23 @@ export default function AcquisitionFlightRoadmap() {
               >
                 <line
                   x1={lineX1}
-                  y1={step.y}
+                  y1={lineY1}
                   x2={lineX2}
-                  y2={step.y}
+                  y2={lineY2}
                   stroke={isActive ? "#ffffff" : "rgba(100,116,139,0.35)"}
                   strokeWidth={isActive ? "2" : "1"}
                   strokeDasharray={isActive ? "none" : "6 6"}
                   opacity={isActive ? 1 : 0.35}
                 />
                 <circle
-                  cx={step.cardSide === "left" ? lineX1 : lineX2}
-                  cy={step.y}
+                  cx={lineX1}
+                  cy={lineY1}
                   r={isActive ? 3.5 : 2}
                   fill={isActive ? "#ffffff" : "#64748b"}
                 />
                 <circle
-                  cx={step.cardSide === "left" ? lineX2 : lineX1}
-                  cy={step.y}
+                  cx={lineX2}
+                  cy={lineY2}
                   r={isActive ? 3.5 : 2}
                   fill={isActive ? "#ffffff" : "#64748b"}
                 />
@@ -994,12 +1023,13 @@ export default function AcquisitionFlightRoadmap() {
             const isPast = activeStepIndex > actualIdx;
             const cardWidth = 600;
             const cardHeight = 240;
-            const cardTop = step.y - cardHeight / 2;
+            const cardTop = isMobile ? (step.y - 420) : (step.y - cardHeight / 2);
+            const cardX = isMobile ? (step.x - cardWidth / 2) : step.cardX;
 
             return (
               <foreignObject
                 key={`card-fo-${step.step}`}
-                x={step.cardX}
+                x={cardX}
                 y={cardTop}
                 width={cardWidth}
                 height={cardHeight}

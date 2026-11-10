@@ -220,13 +220,13 @@ const HERO_CARD_ROW_3: HeroCarouselCard[] = [
 // ── Reusable Component for Background Carousel Cards ──
 function MarketplaceHeroCardView({ card }: { card: HeroCarouselCard }) {
   return (
-    <div className="relative w-[280px] sm:w-[320px] md:w-[340px] h-[190px] sm:h-[210px] md:h-[220px] rounded-2xl overflow-hidden border border-zinc-800/80 bg-[#0e1117] shrink-0 shadow-2xl transition-transform">
+    <div className="relative w-[165px] sm:w-[240px] md:w-[340px] h-[110px] sm:h-[160px] md:h-[220px] rounded-xl sm:rounded-2xl overflow-hidden border border-zinc-800/80 bg-[#0e1117] shrink-0 shadow-2xl transition-transform">
       {/* Jet Background Image */}
       <Image
         src={card.image}
         alt={card.model}
         fill
-        sizes="(max-width: 768px) 300px, 360px"
+        sizes="(max-width: 768px) 180px, 360px"
         className="object-cover object-center brightness-100 contrast-105"
         unoptimized
       />
@@ -235,9 +235,9 @@ function MarketplaceHeroCardView({ card }: { card: HeroCarouselCard }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 via-40% to-transparent pointer-events-none" />
 
       {/* Top-Right Diagonal Ribbon Badge */}
-      <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none z-10">
+      <div className="absolute top-0 right-0 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 overflow-hidden pointer-events-none z-10">
         <div
-          className={`absolute transform rotate-45 text-[9px] font-mono font-black py-0.5 right-[-32px] top-[16px] w-[115px] text-center tracking-widest uppercase shadow-md ${
+          className={`absolute transform rotate-45 text-[7px] sm:text-[8px] md:text-[9px] font-mono font-black py-0.5 right-[-32px] top-[10px] sm:top-[12px] md:top-[16px] w-[100px] sm:w-[110px] md:w-[115px] text-center tracking-widest uppercase shadow-md ${
             card.badge === "FEATURED"
               ? "bg-[#c8a97e] text-black shadow-[0_2px_8px_rgba(200,169,126,0.35)]"
               : "bg-slate-200 text-black shadow-[0_2px_8px_rgba(255,255,255,0.25)]"
@@ -248,21 +248,21 @@ function MarketplaceHeroCardView({ card }: { card: HeroCarouselCard }) {
       </div>
 
       {/* Card Info Overlay */}
-      <div className="relative z-10 p-4 h-full flex flex-col justify-end">
+      <div className="relative z-10 p-2.5 sm:p-3.5 md:p-4 h-full flex flex-col justify-end">
         {/* Price Pill Tag */}
-        <div className="mb-1.5">
-          <span className="inline-block px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[11px] font-mono font-bold text-white shadow-md">
+        <div className="mb-1 sm:mb-1.5">
+          <span className="inline-block px-1.5 sm:px-2 md:px-2.5 py-0.25 sm:py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold text-white shadow-md">
             {card.price}
           </span>
         </div>
 
         {/* Aircraft Model */}
-        <h4 className="text-white text-base sm:text-lg font-bold tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] truncate">
+        <h4 className="text-white text-xs sm:text-base md:text-lg font-bold tracking-tight leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] truncate">
           {card.model}
         </h4>
 
         {/* Details: Category · Year · Location */}
-        <div className="text-[11px] text-zinc-400 font-medium flex items-center gap-1.5 mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] truncate">
+        <div className="text-[9px] sm:text-[10px] md:text-[11px] text-zinc-400 font-medium flex items-center gap-1 sm:gap-1.5 mt-0.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] truncate">
           <span>{card.category}</span>
           <span className="text-zinc-600">•</span>
           <span>{card.year}</span>
@@ -624,11 +624,11 @@ export default function MarketplacePage() {
       {/* ── 1. Fullscreen Hero Page with Vivid, High-Visibility Background Jet Carousels ── */}
       <section className="relative w-full min-h-[92vh] sm:min-h-screen flex flex-col items-center justify-center text-center overflow-hidden pt-20 pb-16">
         {/* ── Background Moving Carousel Streams: Authentic Marketplace Cards (Moving continuously) ── */}
-        <div className="absolute inset-0 z-0 flex flex-col justify-center gap-5 sm:gap-7 overflow-hidden pointer-events-none opacity-85 sm:opacity-90">
+        <div className="absolute inset-0 z-0 flex flex-col justify-center gap-2.5 sm:gap-5 md:gap-7 overflow-hidden pointer-events-none opacity-85 sm:opacity-90">
           {/* Row 1: Right to Left (Featured Listings) */}
           <div className="relative w-full overflow-hidden flex items-center">
             <div
-              className="flex items-center gap-4 sm:gap-6 w-max animate-marquee-rtl py-1"
+              className="flex items-center gap-2.5 sm:gap-4 md:gap-6 w-max animate-marquee-rtl py-0.5 sm:py-1"
               style={{ animationDuration: "48s" }}
             >
               {[...HERO_CARD_ROW_1, ...HERO_CARD_ROW_1].map((card, i) => (
@@ -640,7 +640,7 @@ export default function MarketplacePage() {
           {/* Row 2: Left to Right (Verified Aircraft) */}
           <div className="relative w-full overflow-hidden flex items-center">
             <div
-              className="flex items-center gap-4 sm:gap-6 w-max animate-marquee-ltr py-1"
+              className="flex items-center gap-2.5 sm:gap-4 md:gap-6 w-max animate-marquee-ltr py-0.5 sm:py-1"
               style={{ animationDuration: "54s" }}
             >
               {[...HERO_CARD_ROW_2, ...HERO_CARD_ROW_2].map((card, i) => (
@@ -652,7 +652,7 @@ export default function MarketplacePage() {
           {/* Row 3: Right to Left (Additional Selection / Turboprops & Rotorcraft) */}
           <div className="relative w-full overflow-hidden flex items-center">
             <div
-              className="flex items-center gap-4 sm:gap-6 w-max animate-marquee-rtl py-1"
+              className="flex items-center gap-2.5 sm:gap-4 md:gap-6 w-max animate-marquee-rtl py-0.5 sm:py-1"
               style={{ animationDuration: "50s" }}
             >
               {[...HERO_CARD_ROW_3, ...HERO_CARD_ROW_3].map((card, i) => (
@@ -915,7 +915,7 @@ export default function MarketplacePage() {
 
           {/* Infinite Moving Marquee Line from Right to Left */}
           <div
-            className="flex items-center gap-5 sm:gap-7 w-max animate-marquee-rtl py-4 px-4 hover:[animation-play-state:paused]"
+            className="flex items-center gap-3.5 sm:gap-5 md:gap-7 w-max animate-marquee-rtl py-3 sm:py-4 px-2 sm:px-4 hover:[animation-play-state:paused]"
             style={{ animationDuration: "50s" }}
           >
             {[...filteredListings, ...filteredListings, ...filteredListings].map((item, idx) => (
@@ -925,34 +925,34 @@ export default function MarketplacePage() {
                   const el = document.getElementById("signup");
                   el?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="group relative w-[260px] sm:w-[290px] md:w-[310px] h-[390px] sm:h-[430px] md:h-[460px] rounded-2xl sm:rounded-3xl overflow-hidden shrink-0 border border-white/10 hover:border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.85)] transition-all duration-500 hover:scale-[1.03] cursor-pointer select-none bg-[#0a0d14]"
+                className="group relative w-[190px] sm:w-[250px] md:w-[310px] h-[280px] sm:h-[370px] md:h-[460px] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shrink-0 border border-white/10 hover:border-white/30 shadow-[0_20px_50px_rgba(0,0,0,0.85)] transition-all duration-500 hover:scale-[1.03] cursor-pointer select-none bg-[#0a0d14]"
               >
                 {/* 1. Full Frame Aircraft Photograph */}
                 <Image
                   src={item.image}
                   alt={item.model}
                   fill
-                  sizes="(max-width: 768px) 290px, 320px"
+                  sizes="(max-width: 768px) 200px, 320px"
                   className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   unoptimized
                 />
 
                 {/* 2. Top-Right Corner Featured Tag (Diagonal 45° Ribbon matching Image 2 reference) */}
-                <div className="absolute top-0 right-0 w-28 h-28 overflow-hidden pointer-events-none z-20">
-                  <div className="absolute transform rotate-45 bg-gradient-to-r from-[#e8c887] via-[#c8a97e] to-[#b38e55] text-zinc-950 font-black text-[10px] sm:text-[11px] py-1 right-[-32px] top-[18px] w-[125px] text-center tracking-[0.2em] uppercase shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                <div className="absolute top-0 right-0 w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 overflow-hidden pointer-events-none z-20">
+                  <div className="absolute transform rotate-45 bg-gradient-to-r from-[#e8c887] via-[#c8a97e] to-[#b38e55] text-zinc-950 font-black text-[8px] sm:text-[9px] md:text-[11px] py-0.5 sm:py-1 right-[-32px] top-[14px] sm:top-[16px] md:top-[18px] w-[110px] sm:w-[120px] md:w-[125px] text-center tracking-[0.2em] uppercase shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
                     FEATURED
                   </div>
                 </div>
 
                 {/* 3. Bottom Overlay with Frosted Glass Blur Effect & Text within the Image */}
-                <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/75 to-transparent backdrop-blur-[8px] transition-all duration-300 group-hover:backdrop-blur-[12px]">
+                <div className="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 md:p-5 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/75 to-transparent backdrop-blur-[8px] transition-all duration-300 group-hover:backdrop-blur-[12px]">
                   {/* Aircraft Model Name */}
-                  <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                  <h3 className="text-sm sm:text-lg md:text-xl font-bold tracking-tight text-white leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] truncate">
                     {item.model}
                   </h3>
 
                   {/* Category & Asking Valuation Subtitle */}
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[11px] font-mono">
+                  <div className="flex items-center justify-between mt-1.5 sm:mt-2 pt-1.5 sm:pt-2 border-t border-white/10 text-[10px] sm:text-[11px] font-mono">
                     <span className="text-zinc-300 tracking-wider truncate mr-2">
                       {item.year} • {item.category}
                     </span>
