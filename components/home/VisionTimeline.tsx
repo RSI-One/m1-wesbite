@@ -18,6 +18,7 @@ function lerp(a: number, b: number, t: number) {
 
 export default function VisionTimeline() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const mobileSectionRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
   const targetRef = useRef(0);
   const smoothRef = useRef(0);
@@ -27,19 +28,34 @@ export default function VisionTimeline() {
   const [landingProgress, setLandingProgress] = useState(0);
   const [isLandedAtRunway, setIsLandedAtRunway] = useState(false);
 
+  // Dedicated mobile scroll tracking (one-by-one milestone progression)
+  const [mobileIndex, setMobileIndex] = useState(0);
+
   useEffect(() => {
     let active = true;
     const isDesktop = () => typeof window !== "undefined" && window.innerWidth >= 1024;
 
     const onScroll = () => {
-      if (!isDesktop() || !sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      if (scrollable <= 0) return;
+      if (isDesktop()) {
+        if (!sectionRef.current) return;
+        const rect = sectionRef.current.getBoundingClientRect();
+        const scrollable = rect.height - window.innerHeight;
+        if (scrollable <= 0) return;
 
-      // Global normalized scroll progress from 0.0 to 1.0
-      const p = clamp(-rect.top / scrollable, 0, 1);
-      targetRef.current = p;
+        // Global normalized scroll progress from 0.0 to 1.0
+        const p = clamp(-rect.top / scrollable, 0, 1);
+        targetRef.current = p;
+      } else {
+        if (!mobileSectionRef.current) return;
+        const rect = mobileSectionRef.current.getBoundingClientRect();
+        const scrollable = rect.height - window.innerHeight;
+        if (scrollable <= 0) return;
+
+        const p = clamp(-rect.top / scrollable, 0, 1);
+        // Map p across 6 milestones smoothly (one by one as user scrolls)
+        const idx = clamp(Math.floor(p * TOTAL), 0, TOTAL - 1);
+        setMobileIndex(idx);
+      }
     };
 
     const loop = () => {
@@ -108,6 +124,15 @@ export default function VisionTimeline() {
       top: docTop + targetP * scrollable,
       behavior: "smooth",
     });
+  };
+
+  const scrollMobileTo = (index: number) => {
+    if (!mobileSectionRef.current) return;
+    const rect = mobileSectionRef.current.getBoundingClientRect();
+    const scrollable = rect.height - window.innerHeight;
+    if (scrollable <= 0) return;
+    const targetScrollY = window.scrollY + rect.top + (index / (TOTAL - 1)) * scrollable;
+    window.scrollTo({ top: targetScrollY, behavior: "smooth" });
   };
 
   const handlePrev = (e: React.MouseEvent) => {
@@ -749,104 +774,127 @@ export default function VisionTimeline() {
         </div>
       </div>
 
-      {/* ── MOBILE & TABLET: Streamlined Vertical Strategic Roadmap ── */}
-      <div className="block lg:hidden relative w-full bg-[#01050a] py-16 sm:py-20 px-4 sm:px-6 overflow-hidden">
-        {/* Subtle Cosmic Starfield Atmosphere */}
-        <div className="absolute inset-0 pointer-events-none z-0">
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage:
-                "radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 150px 120px, #7dd3fc, rgba(0,0,0,0)), radial-gradient(1px 1px at 280px 320px, #38bdf8, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 450px 80px, #ffffff, rgba(0,0,0,0))",
-              backgroundSize: "400px 300px",
-            }}
-          />
-          <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-[#01050a] via-transparent to-transparent" />
-          <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-[#01050a] via-transparent to-transparent" />
-        </div>
-
-        <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
-          {/* Header */}
-          <div className="text-center space-y-2 mb-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md shadow-[0_0_15px_rgba(0,229,255,0.15)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
-              <span className="text-[10px] font-mono tracking-[0.25em] text-[#00e5ff] uppercase">
-                Let&apos;s Travel Together
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
-              10-Year Long Vision
-            </h2>
-            <p className="text-xs text-zinc-400 font-mono tracking-wider max-w-xs mx-auto">
-              A journey towards the next era of aviation.
-            </p>
-          </div>
-
-          {/* 3D Static Aircraft Centerpiece (Rear Perspective View) */}
-          <div className="relative w-full max-w-[340px] my-4 flex flex-col items-center justify-center">
-            {/* Ambient Cyan Thruster Bloom */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-16 bg-[#00e5ff]/20 blur-2xl rounded-full pointer-events-none" />
-            
-            <Image
-              src="/images/vision-rear-jet-crisp.png"
-              alt="M1 Jet 3D Perspective"
-              width={340}
-              height={110}
-              className="w-full h-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)] relative z-10"
-              priority
+      {/* ── MOBILE & TABLET: Scroll-Driven Single-Milestone Stepped Roadmap ── */}
+      {/* User Requirement: "don't keep all the milestones of 10 year vision section visible. Keep bringing them in one by one as user scroll." */}
+      <div
+        ref={mobileSectionRef}
+        className="block lg:hidden relative w-full bg-[#01050a]"
+        style={{ height: "300vh" }}
+      >
+        <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-between py-6 px-4 overflow-hidden z-10">
+          {/* Subtle Cosmic Starfield Atmosphere */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div
+              className="absolute inset-0 opacity-30"
+              style={{
+                backgroundImage:
+                  "radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 150px 120px, #7dd3fc, rgba(0,0,0,0)), radial-gradient(1px 1px at 280px 320px, #38bdf8, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 450px 80px, #ffffff, rgba(0,0,0,0))",
+                backgroundSize: "400px 300px",
+              }}
             />
-
-            {/* Glowing Runway Guideline */}
-            <div className="w-full max-w-[240px] h-[1.5px] bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-2 shadow-[0_0_10px_#00e5ff]" />
-            <div className="text-[9px] font-mono tracking-[0.28em] text-cyan-400/80 mt-1 uppercase">
-              CYCLE 2027–2037
-            </div>
+            <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#01050a] via-transparent to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#01050a] via-transparent to-transparent" />
           </div>
 
-          {/* Vertical Roadmap Timeline */}
-          <div className="relative w-full mt-8 pl-6 sm:pl-8 space-y-5">
-            {/* Continuous Vertical Cyan Spine */}
-            <div className="absolute left-[9px] sm:left-[13px] top-3 bottom-4 w-[2px] bg-gradient-to-b from-[#00e5ff] via-[#00e5ff]/50 to-transparent shadow-[0_0_8px_rgba(0,229,255,0.4)]" />
-
-            {VISION_MILESTONES.map((milestone, idx) => (
-              <div key={milestone.year} className="relative">
-                {/* Node Indicator Dot */}
-                <div className="absolute -left-[24px] sm:-left-[28px] top-3.5 w-5 h-5 rounded-full bg-[#020712] border-2 border-[#00e5ff] flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.6)] z-10">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]" />
-                </div>
-
-                {/* Milestone Card */}
-                <div
-                  className="rounded-2xl p-4 sm:p-5 border border-white/10 backdrop-blur-xl"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(8, 14, 24, 0.90) 0%, rgba(3, 7, 14, 0.98) 100%)",
-                    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12)",
-                  }}
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#00e5ff] text-black font-mono font-bold text-[9px] tracking-wider uppercase shadow-[0_0_8px_rgba(0,229,255,0.3)]">
-                      {milestone.phase}
-                    </span>
-                    <span className="text-xs font-mono font-bold text-cyan-300 tracking-widest">
-                      {milestone.year}
-                    </span>
-                  </div>
-
-                  <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
-                    {milestone.title}
-                  </h3>
-
-                  <p className="mt-1.5 text-xs text-zinc-300 font-light leading-relaxed">
-                    {milestone.statement}
-                  </p>
-
-                  <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[9px] font-mono text-zinc-500">
-                    <span>{milestone.cycle}</span>
-                    <span className="text-cyan-400/60 font-semibold">0{idx + 1} / 06</span>
-                  </div>
-                </div>
+          <div className="relative z-10 w-full max-w-sm mx-auto flex flex-col items-center flex-1 justify-between py-2 sm:py-4">
+            {/* Header */}
+            <div className="text-center space-y-1.5 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 backdrop-blur-md shadow-[0_0_15px_rgba(0,229,255,0.15)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
+                <span className="text-[9px] font-mono tracking-[0.25em] text-[#00e5ff] uppercase">
+                  Let&apos;s Travel Together
+                </span>
               </div>
-            ))}
+              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                10-Year Long Vision
+              </h2>
+              <p className="text-[11px] text-zinc-400 font-mono tracking-wider max-w-xs mx-auto">
+                A journey towards the next era of aviation.
+              </p>
+            </div>
+
+            {/* 3D Static Aircraft Centerpiece (Rear Perspective View) */}
+            <div className="relative w-full max-w-[260px] sm:max-w-[300px] my-2 flex flex-col items-center justify-center">
+              {/* Ambient Cyan Thruster Bloom */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-14 bg-[#00e5ff]/25 blur-2xl rounded-full pointer-events-none" />
+              
+              <Image
+                src="/images/vision-rear-jet-crisp.png"
+                alt="M1 Jet 3D Perspective"
+                width={300}
+                height={95}
+                className="w-full h-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)] relative z-10"
+                priority
+              />
+
+              {/* Glowing Runway Guideline */}
+              <div className="w-full max-w-[200px] h-[1.5px] bg-gradient-to-r from-transparent via-[#00e5ff] to-transparent mt-1 shadow-[0_0_10px_#00e5ff]" />
+              <div className="text-[8px] font-mono tracking-[0.28em] text-cyan-400/80 mt-1 uppercase">
+                CYCLE 2027–2037
+              </div>
+            </div>
+
+            {/* Active Milestone Card - Brought In One by One as user scrolls */}
+            <div className="w-full my-auto px-1">
+              {(() => {
+                const milestone = VISION_MILESTONES[mobileIndex] || VISION_MILESTONES[0];
+                return (
+                  <div
+                    key={milestone.year}
+                    className="w-full rounded-2xl p-4 sm:p-5 border border-cyan-500/30 backdrop-blur-xl transition-all duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(0,229,255,0.12)]"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(8, 14, 24, 0.95) 0%, rgba(3, 7, 14, 0.98) 100%)",
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-[#00e5ff] text-black font-mono font-bold text-[9px] tracking-wider uppercase shadow-[0_0_8px_rgba(0,229,255,0.3)]">
+                        {milestone.phase}
+                      </span>
+                      <span className="text-xs font-mono font-bold text-cyan-300 tracking-widest">
+                        {milestone.year}
+                      </span>
+                    </div>
+
+                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight leading-snug">
+                      {milestone.title}
+                    </h3>
+
+                    <p className="mt-1.5 text-xs text-zinc-300 font-light leading-relaxed">
+                      {milestone.statement}
+                    </p>
+
+                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-zinc-500">
+                      <span>{milestone.cycle}</span>
+                      <span className="text-cyan-400 font-semibold">0{mobileIndex + 1} / 06</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* 6 Interactive Step Indicator Pills & Scroll Prompt */}
+            <div className="w-full flex flex-col items-center gap-2 pb-2">
+              <div className="flex items-center justify-center gap-1.5">
+                {VISION_MILESTONES.map((m, idx) => (
+                  <button
+                    key={m.phase}
+                    onClick={() => scrollMobileTo(idx)}
+                    className={`transition-all duration-300 rounded-full h-1.5 ${
+                      idx === mobileIndex
+                        ? "w-7 bg-[#00e5ff] shadow-[0_0_8px_#00e5ff]"
+                        : "w-2 bg-white/20 hover:bg-white/40"
+                    }`}
+                    aria-label={`Jump to ${m.phase}`}
+                  />
+                ))}
+              </div>
+
+              {/* Scroll Guidance Prompt */}
+              <div className="text-[9px] font-mono tracking-widest text-zinc-500 uppercase flex items-center gap-1.5">
+                <span>↓ Scroll to advance timeline</span>
+                <span className="text-cyan-400 font-semibold font-mono">({mobileIndex + 1}/6)</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
