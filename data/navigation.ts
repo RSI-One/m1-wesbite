@@ -4,6 +4,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "AVI Times", href: "/aviation-times" },
   { label: "Marketplace", href: "https://app.m-1.tech", isExternal: true },
+  { label: "Avigram", href: "/avigram" },
   { label: "Industry Partner", href: "/industry-partner" },
   { label: "SIOS", href: "/saios" },
   { label: "Contact", href: "/#contact" },

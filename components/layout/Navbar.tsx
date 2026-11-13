@@ -5,6 +5,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import M1Logo from "@/components/ui/M1Logo";
 
+const PRIMARY_NAV_LINKS = [
+  { href: "/aviation-times", label: "AVI Times", sub: "Journal" },
+  { href: "/marketplace", label: "Marketplace", sub: "Exchange" },
+  { href: "/avigram", label: "Avigram", sub: "Community" },
+  { href: "/industry-partner", label: "Industry Partner", sub: "Alliance" },
+  { href: "/saios", label: "SIOS", sub: "Flight OS" },
+] as const;
+
+const DRAWER_NAV_LINKS = [
+  { href: "/", label: "Home", sub: "Overview" },
+  ...PRIMARY_NAV_LINKS,
+  { href: "/#contact", label: "Contact", sub: "Dispatch" },
+] as const;
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hiddenAtBottom, setHiddenAtBottom] = useState(false);
@@ -93,14 +107,14 @@ export default function Navbar() {
         {/* ── Desktop Widescreen Floating Bar (>= md): 100% Unchanged Luxury Experience ── */}
         <nav
           aria-label="Main Suspended Navigation"
-          className="pointer-events-auto hidden md:flex items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 px-6 sm:px-8 md:px-10 py-2 sm:py-2.5 rounded-full backdrop-blur-xl border border-white/20 hover:border-white/35 text-white transition-all max-w-5xl md:max-w-5xl lg:max-w-6xl w-auto font-mono text-xs uppercase tracking-wider shadow-[0_12px_40px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.3)]"
+          className="pointer-events-auto hidden md:flex items-center justify-center gap-3 md:gap-3 lg:gap-6 xl:gap-8 px-5 md:px-6 lg:px-8 xl:px-10 py-2 sm:py-2.5 rounded-full backdrop-blur-xl border border-white/20 hover:border-white/35 text-white transition-all max-w-[calc(100vw-2rem)] lg:max-w-6xl w-auto font-mono text-[11px] lg:text-xs uppercase tracking-wider shadow-[0_12px_40px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.3)]"
           style={{
             background:
               "linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(10, 15, 25, 0.22) 50%, rgba(5, 8, 14, 0.28) 100%)",
           }}
         >
           {/* Inner content */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 w-full">
+          <div className="flex items-center justify-center gap-3 md:gap-3 lg:gap-6 xl:gap-8 w-full">
             {/* 1. M1 Logo */}
             <Link
               href="/"
@@ -114,55 +128,23 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* 2. AVI Times */}
-            <Link
-              href="/aviation-times"
-              className={`whitespace-nowrap transition-all duration-200 px-3.5 py-1 rounded-full font-bold tracking-[0.16em] ${
-                pathname === "/aviation-times"
-                  ? "text-white bg-white/20 border border-white/60 shadow-[0_0_14px_rgba(255,255,255,0.4)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
-                  : "text-zinc-200 hover:text-white border border-transparent hover:border-white/20 hover:bg-white/10"
-              }`}
-            >
-              <span>AVI Times</span>
-            </Link>
+            {/* Primary Navigation Links */}
+            {PRIMARY_NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                prefetch={false}
+                className={`whitespace-nowrap transition-all duration-200 px-2.5 lg:px-3.5 py-1 rounded-full font-bold tracking-[0.12em] lg:tracking-[0.16em] ${
+                  pathname === href
+                    ? "text-white bg-white/20 border border-white/60 shadow-[0_0_14px_rgba(255,255,255,0.4)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
+                    : "text-zinc-200 hover:text-white border border-transparent hover:border-white/20 hover:bg-white/10"
+                }`}
+              >
+                <span>{label}</span>
+              </Link>
+            ))}
 
-            {/* 3. Marketplace */}
-            <Link
-              href="/marketplace"
-              className={`whitespace-nowrap transition-all duration-200 px-3.5 py-1 rounded-full font-bold tracking-[0.16em] ${
-                pathname === "/marketplace"
-                  ? "text-white bg-white/20 border border-white/60 shadow-[0_0_14px_rgba(255,255,255,0.4)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
-                  : "text-zinc-200 hover:text-white border border-transparent hover:border-white/20 hover:bg-white/10"
-              }`}
-            >
-              <span>Marketplace</span>
-            </Link>
-
-            {/* 4. Industry Partner */}
-            <Link
-              href="/industry-partner"
-              className={`whitespace-nowrap transition-all duration-200 px-3.5 py-1 rounded-full font-bold tracking-[0.16em] ${
-                pathname === "/industry-partner"
-                  ? "text-white bg-white/20 border border-white/60 shadow-[0_0_14px_rgba(255,255,255,0.4)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
-                  : "text-zinc-200 hover:text-white border border-transparent hover:border-white/20 hover:bg-white/10"
-              }`}
-            >
-              <span>Industry Partner</span>
-            </Link>
-
-            {/* 5. SIOS */}
-            <Link
-              href="/saios"
-              className={`whitespace-nowrap transition-all duration-200 px-3.5 py-1 rounded-full font-bold tracking-[0.16em] ${
-                pathname === "/saios"
-                  ? "text-white bg-white/20 border border-white/60 shadow-[0_0_14px_rgba(255,255,255,0.4)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]"
-                  : "text-zinc-200 hover:text-white border border-transparent hover:border-white/20 hover:bg-white/10"
-              }`}
-            >
-              <span>SIOS</span>
-            </Link>
-
-            {/* 6. Hamburger Menu Button */}
+            {/* Hamburger Menu Button */}
             <button
               type="button"
               aria-label="Open Extended Menu Drawer"
@@ -224,17 +206,11 @@ export default function Navbar() {
 
           {/* Navigation Links List (Large, bold, modern typography) */}
           <nav className="flex flex-col space-y-3.5">
-            {[
-              { href: "/",                 label: "Home",                 sub: "Overview" },
-              { href: "/aviation-times",   label: "AVI Times",            sub: "Journal" },
-              { href: "/marketplace",      label: "Marketplace",          sub: "Exchange" },
-              { href: "/industry-partner", label: "Industry Partner",     sub: "Alliance" },
-              { href: "/saios",            label: "SIOS",                 sub: "Flight OS" },
-              { href: "/#contact",         label: "Contact",              sub: "Dispatch" },
-            ].map(({ href, label, sub }) => (
+            {DRAWER_NAV_LINKS.map(({ href, label, sub }) => (
               <Link
                 key={href}
                 href={href}
+                prefetch={false}
                 onClick={() => setMenuOpen(false)}
                 className="group flex items-center justify-between text-2xl sm:text-[28px] font-bold text-zinc-200 hover:text-white transition-all py-1 hover:translate-x-2"
               >

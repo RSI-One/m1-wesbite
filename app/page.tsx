@@ -8,7 +8,7 @@ import SectionDivider from "@/components/home/SectionDivider";
 // ── Below-the-fold components dynamically code-split for sub-second initial load & reduced JS payload ──
 const OurLineup = dynamic(() => import("@/components/home/OurLineup"));
 const FullStackDeck = dynamic(() => import("@/components/home/FullStackDeck"), { ssr: false });
-const AviGramSection = dynamic(() => import("@/components/home/AviGramSection"));
+const MarketIntelligenceSection = dynamic(() => import("@/components/home/MarketIntelligenceSection"));
 const ScrollFlightJet = dynamic(() => import("@/components/home/ScrollFlightJet"), { ssr: false });
 const OneLiner = dynamic(() => import("@/components/home/OneLiner"));
 const PartnerStrip = dynamic(() => import("@/components/home/PartnerStrip"));
@@ -23,20 +23,20 @@ export default function Home() {
         {/* 1. Fullscreen Cinematic Hero */}
         <Hero />
 
-        {/* 2. Stacked Products Lineup with Card Scroll Sound Effects */}
+        {/* 2. M1: Market Intelligence */}
+        <div className="relative z-20 w-full">
+          <MarketIntelligenceSection />
+        </div>
+
+        {/* 3. Stacked Products Lineup with Card Scroll Sound Effects */}
         <div id="lineup" className="relative z-20 w-full">
           <OurLineup />
         </div>
 
-        {/* 2b. The Full Stack: 4-Cards Fanned Perspective Deck (Desktop only to prevent card fatigue on mobile) */}
+        {/* 3b. The Full Stack: 4-Cards Fanned Perspective Deck (Desktop only to prevent card fatigue on mobile) */}
         <div id="fullstack" className="hidden lg:block relative z-10 w-full">
           <FullStackDeck />
         </div>
-
-        {/* 2c. M1 AviGram: The High-Altitude Aviation Social Network */}
-        <SectionFocusItem id="avigram">
-          <AviGramSection />
-        </SectionFocusItem>
 
         <SectionDivider />
 

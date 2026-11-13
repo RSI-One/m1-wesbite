@@ -92,7 +92,7 @@ const PRODUCTS: ProductCard[] = [
     ],
     imageSrc: "/images/avigram-card.jpg",
     ctaLabel: "Pre-signup",
-    ctaHref: "#avigram",
+    ctaHref: "/avigram",
     isExternal: false,
     ctaVariant: "white",
     cardStyle:

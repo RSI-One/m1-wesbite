@@ -348,7 +348,7 @@ export default function Footer() {
                       {item.label} ↗
                     </a>
                   ) : (
-                    <Link href={item.href} className="hover:text-white transition-colors inline-block">
+                    <Link href={item.href} prefetch={false} className="hover:text-white transition-colors inline-block">
                       {item.label}
                     </Link>
                   )}
@@ -424,6 +424,7 @@ export default function Footer() {
           <div>© {new Date().getFullYear()} M1 Aviation Ecosystem. All rights reserved.</div>
           <div className="flex items-center gap-6">
             <Link href="/saios" className="hover:text-zinc-200 transition-colors">SIOS</Link>
+            <Link href="/avigram" className="hover:text-zinc-200 transition-colors">Avigram</Link>
             <Link href="/industry-partner" className="hover:text-zinc-200 transition-colors">Partner Program</Link>
             <Link href="/aviation-times" className="hover:text-zinc-200 transition-colors">AVI Times</Link>
           </div>

@@ -14,6 +14,7 @@ interface FlightState {
   yaw: number;
   pitch: number;
   roll: number;
+  cameraY?: number;
   opacity: number;
   takeoffX?: number;
   takeoffY?: number;
@@ -30,6 +31,7 @@ export default function ScrollFlightJet() {
     yaw: 28,
     pitch: 2,
     roll: 0,
+    cameraY: 1.2,
     opacity: 0,
     takeoffX: undefined,
     takeoffY: undefined,
@@ -156,8 +158,8 @@ export default function ScrollFlightJet() {
 
       // Destination on the blue road runway (exact pixel alignment with Vision runway jet)
       const runwayJetAnchor =
-        document.getElementById("vision-end-jet-anchor") ||
-        document.getElementById("vision-end-jet");
+        document.getElementById("vision-end-jet") ||
+        document.getElementById("vision-end-jet-anchor");
 
       let landingX = vw * 0.5;
       let landingY = vh - 195;
@@ -171,8 +173,13 @@ export default function ScrollFlightJet() {
       }
 
       const jetWidth = 1100;
-      const targetJetW = Math.max(540, Math.min(820, vw * 0.46));
-      const landingScale = targetJetW / jetWidth;
+      const targetJetW = Math.max(520, Math.min(820, vw * 0.46));
+      // Calibrated 1:1 scale match to VisionTimeline:
+      // In VisionTimeline, the container width is clamp(520px, 46vw, 820px) (= targetJetW),
+      // with finalScale = 1.50 and modelScale = 1.65.
+      // In ScrollFlightJet, width = 1100, modelScale = 1.65.
+      // Setting landingScale = (targetJetW * 1.50) / jetWidth ensures 100% identical rendered pixel size at touchdown!
+      const landingScale = (targetJetW * 1.50) / jetWidth;
 
       // Waypoints for the multi-stage 3D flight maneuver
       const p1X = vw * 0.26;
@@ -189,6 +196,7 @@ export default function ScrollFlightJet() {
       let curPitch = 2;
       let curRoll = 0;
       let curScale = 1.0;
+      let curCameraY = 1.2;
 
       // 1. Instantaneous heading of aircraft at the moment user initiated liftoff
       const rawPlatformYaw = initialPlatformYawRef.current ?? 28;
@@ -213,6 +221,7 @@ export default function ScrollFlightJet() {
         curPitch = 2 + (14 - 2) * ease1;
         curRoll = 0 + (-16 - 0) * ease1;
         curScale = 1.0 + (1.22 - 1.0) * ease1;
+        curCameraY = 1.2;
       } else if (pClamped <= 0.68) {
         // Phase 2 (0.30 -> 0.68): Big Smooth Round Swoop & Bank Across Screen (Left to Right)
         const t2 = (pClamped - 0.30) / 0.38;
@@ -222,13 +231,14 @@ export default function ScrollFlightJet() {
         const arcDip = Math.sin(t2 * Math.PI) * (vh * 0.08);
         curY = p1Y + (p2Y - p1Y) * ease2 + arcDip;
 
-        curScale = 1.22 + 0.10 * Math.sin(t2 * Math.PI) + (1.18 - 1.22) * ease2;
+        curScale = 1.22 + 0.10 * Math.sin(t2 * Math.PI) + (1.20 - 1.22) * ease2;
         curYaw = 48 + (-60 - 48) * ease2;
         curRoll = -16 + (32 - (-16)) * ease2; // Dynamic bank twist from -16 deg to +32 deg
         curPitch = 14 + (2 - 14) * ease2;
-      } else if (pClamped <= 0.88) {
-        // Phase 3 (0.68 -> 0.88): Align Inwards with Runway Centerline
-        const t3 = (pClamped - 0.68) / 0.20;
+        curCameraY = 1.2;
+      } else if (pClamped <= 0.86) {
+        // Phase 3 (0.68 -> 0.86): Align Inwards with Runway Centerline & Smooth Approach Descent
+        const t3 = (pClamped - 0.68) / 0.18;
         const ease3 = t3 * t3 * (3 - 2 * t3);
 
         curX = p2X + (landingX - p2X) * ease3;
@@ -236,11 +246,16 @@ export default function ScrollFlightJet() {
 
         curRoll = 32 * (1 - ease3); // Levels wings back to 0
         curYaw = -60 + (-90 - (-60)) * ease3; // Aligns straight down runway heading (-90)
-        curPitch = 2 + (0 - 2) * ease3;
-        curScale = 1.18 + (landingScale - 1.18) * ease3;
+        curPitch = 2 + (0.4 - 2) * ease3; // Smoothly transitions to 0.4 deg (matching VisionTimeline cruisingPitch)
+        curCameraY = 1.2 + (0.85 - 1.2) * ease3;
+
+        // Continuous smooth approach scaling towards runway scale (0.68 -> 0.96)
+        const tApproach = Math.min(1, (pClamped - 0.68) / 0.28);
+        const easeApproach = tApproach * tApproach * (3 - 2 * tApproach);
+        curScale = 1.20 + (landingScale - 1.20) * easeApproach;
       } else {
-        // Phase 4 (0.88 -> 1.00): Touchdown onto Blue Road Runway
-        const t4 = (pClamped - 0.88) / 0.12;
+        // Phase 4 (0.86 -> 0.98): Final Glide-Path Flare & Touchdown onto Blue Road Runway Centerline
+        const t4 = Math.min(1, (pClamped - 0.86) / 0.10);
         const ease4 = t4 * t4 * (3 - 2 * t4);
 
         curX = landingX;
@@ -248,8 +263,12 @@ export default function ScrollFlightJet() {
 
         curRoll = 0;
         curYaw = -90;
-        curPitch = 0;
-        curScale = landingScale;
+        curPitch = 0.4; // Matches VisionTimeline cruisingPitch
+        curCameraY = 0.85 + (0.65 - 0.85) * ease4; // Smoothly lands at cameraY = 0.65 (matching VisionTimeline finalCameraY)
+
+        const tApproach = Math.min(1, (pClamped - 0.68) / 0.28);
+        const easeApproach = tApproach * tApproach * (3 - 2 * tApproach);
+        curScale = 1.20 + (landingScale - 1.20) * easeApproach;
       }
 
       // Synchronize landing angle back to platform turntable for reverse scroll
@@ -275,6 +294,7 @@ export default function ScrollFlightJet() {
         yaw: curYaw,
         pitch: curPitch,
         roll: curRoll,
+        cameraY: curCameraY,
         opacity,
         takeoffX: startX,
         takeoffY: startY,
@@ -359,7 +379,8 @@ export default function ScrollFlightJet() {
             yaw={state.yaw}
             pitch={state.pitch}
             roll={state.roll}
-            modelScale={1.55}
+            cameraY={state.cameraY}
+            modelScale={1.65}
             lightIntensity={1.4}
             immediate={true}
             customColors={LIGHT_PLATINUM_TITANIUM_COLORS}

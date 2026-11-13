@@ -223,6 +223,7 @@ export default function ContactSection() {
                   className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3.5 text-xs sm:text-sm bg-zinc-100/90 border border-zinc-300 rounded-lg sm:rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all font-normal"
                 >
                   <option value="M1 Marketplace Acquisition">M1 Marketplace Acquisition</option>
+                  <option value="M1: Market Intelligence Registration">M1: Market Intelligence Registration</option>
                   <option value="Aircraft Listings & Verification">Aircraft Listings & Verification</option>
                   <option value="SIOS Fleet Integration & Pilot Program">SIOS Fleet Integration & Pilot Program</option>
                   <option value="Avigram Early Access & Pre-signup">Avigram Early Access & Pre-signup</option>

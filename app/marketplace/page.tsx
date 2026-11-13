@@ -6,6 +6,7 @@ import Link from "next/link";
 import ParallelogramButton from "@/components/ui/ParallelogramButton";
 import AcquisitionFlightRoadmap from "@/components/marketplace/AcquisitionFlightRoadmap";
 import MarketplaceAuthTerminal from "@/components/marketplace/MarketplaceAuthTerminal";
+import MarketIntelligenceSection from "@/components/home/MarketIntelligenceSection";
 import { playSolidDockSound } from "@/lib/audio";
 
 // ── Background Jet Carousel Card Definition (Exact style from Seller Console / Marketplace Listings) ──
@@ -1026,7 +1027,12 @@ export default function MarketplacePage() {
         </div>
       </section>
 
-      {/* ── 6. AUTHENTIC MARKETPLACE ACCESS & SIGNUP TERMINAL (At the Very End of Page) ── */}
+      {/* ── 6. M1: MARKET INTELLIGENCE ── */}
+      <div className="relative z-20 w-full border-y border-zinc-900">
+        <MarketIntelligenceSection />
+      </div>
+
+      {/* ── 7. AUTHENTIC MARKETPLACE ACCESS & SIGNUP TERMINAL (At the Very End of Page) ── */}
       <MarketplaceAuthTerminal />
     </div>
   );
