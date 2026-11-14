@@ -88,7 +88,7 @@ export default function MarketIntelligenceSection() {
             fill
             sizes="(max-width: 1440px) 100vw, 1440px"
             className="object-cover object-center brightness-100 contrast-105 transition-transform duration-700 ease-out group-hover:scale-[1.01]"
-            priority
+            loading="lazy"
           />
 
           {/* Subtle atmospheric ambient telemetry glow */}
@@ -108,7 +108,7 @@ export default function MarketIntelligenceSection() {
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover object-center rounded-2xl transition-transform duration-300 group-hover:scale-[1.01]"
-              priority
+              loading="lazy"
             />
           </div>
 
@@ -120,7 +120,7 @@ export default function MarketIntelligenceSection() {
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover object-center rounded-2xl transition-transform duration-300 group-hover:scale-[1.01]"
-              priority
+              loading="lazy"
             />
           </div>
 

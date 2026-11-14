@@ -21,6 +21,7 @@ interface Jet3DViewerProps {
   lightingTheme?: "default" | "tunnel"; // Lighting style
   cameraPos?: [number, number, number]; // Custom camera position
   cameraY?: number; // Dynamic camera vertical position for elevation/perspective adjustments
+  active?: boolean; // When false, suspends WebGL render loop for zero CPU/GPU overhead
   className?: string;
   style?: React.CSSProperties;
   onLoaded?: () => void;
@@ -43,6 +44,7 @@ export default function Jet3DViewer({
   lightingTheme = "default",
   cameraPos,
   cameraY,
+  active = true,
   className = "",
   style,
   onLoaded,
@@ -62,6 +64,17 @@ export default function Jet3DViewer({
   const autoYawRef = useRef(0);
   const lastTimeRef = useRef(0);
   const curCamYRef = useRef(cameraY ?? (cameraPos ? cameraPos[1] : 1.5));
+  const isVisibleRef = useRef(true);
+  const activeRef = useRef(active);
+  const animateRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    activeRef.current = active;
+    if (active && isVisibleRef.current && !animFrameRef.current && animateRef.current && isLoadedRef.current) {
+      lastTimeRef.current = performance.now();
+      animFrameRef.current = requestAnimationFrame(animateRef.current);
+    }
+  }, [active]);
 
   // Dynamic values ref for smooth animation loop
   const targetTransformRef = useRef({
@@ -248,12 +261,39 @@ export default function Jet3DViewer({
     });
     resizeObserver.observe(container);
 
+    // 6b. Viewport Visibility Observer (Stops 60fps render loop when scrolled offscreen)
+    let isVisible = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const wasVisible = isVisible;
+          isVisible = entry.isIntersecting;
+          isVisibleRef.current = isVisible;
+          if (!wasVisible && isVisible && !destroyed && activeRef.current) {
+            lastTimeRef.current = performance.now();
+            if (!animFrameRef.current) {
+              animFrameRef.current = requestAnimationFrame(animate);
+            }
+          }
+        },
+        { rootMargin: "350px" }
+      );
+      observer.observe(container);
+    }
+
     // 7. High-performance 60-120fps render loop
     const curRot = { yaw: yaw, pitch: pitch, roll: roll };
     lastTimeRef.current = performance.now();
 
     const animate = () => {
       if (destroyed) return;
+
+      // Suspend render loop when element is offscreen or explicitly paused
+      if (!isVisible || !activeRef.current) {
+        animFrameRef.current = null;
+        return;
+      }
 
       const now = performance.now();
       const deltaSec = Math.min((now - lastTimeRef.current) / 1000, 0.1);
@@ -342,11 +382,13 @@ export default function Jet3DViewer({
       animFrameRef.current = requestAnimationFrame(animate);
     };
 
+    animateRef.current = animate;
     animFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
       destroyed = true;
       resizeObserver.disconnect();
+      if (observer) observer.disconnect();
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (rendererRef.current) {
         rendererRef.current.dispose();

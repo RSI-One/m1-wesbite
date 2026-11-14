@@ -385,6 +385,7 @@ export default function ScrollFlightJet() {
             immediate={true}
             customColors={LIGHT_PLATINUM_TITANIUM_COLORS}
             lightingTheme="default"
+            active={state.active}
           />
         </div>
       </div>

@@ -8,11 +8,11 @@ import SectionDivider from "@/components/home/SectionDivider";
 // ── Below-the-fold components dynamically code-split for sub-second initial load & reduced JS payload ──
 const OurLineup = dynamic(() => import("@/components/home/OurLineup"));
 const FullStackDeck = dynamic(() => import("@/components/home/FullStackDeck"), { ssr: false });
-const MarketIntelligenceSection = dynamic(() => import("@/components/home/MarketIntelligenceSection"));
+const MarketIntelligenceSection = dynamic(() => import("@/components/home/MarketIntelligenceSection"), { ssr: false });
 const ScrollFlightJet = dynamic(() => import("@/components/home/ScrollFlightJet"), { ssr: false });
-const OneLiner = dynamic(() => import("@/components/home/OneLiner"));
+const OneLiner = dynamic(() => import("@/components/home/OneLiner"), { ssr: false });
 const PartnerStrip = dynamic(() => import("@/components/home/PartnerStrip"));
-const VisionTimeline = dynamic(() => import("@/components/home/VisionTimeline"));
+const VisionTimeline = dynamic(() => import("@/components/home/VisionTimeline"), { ssr: false });
 const ContactSection = dynamic(() => import("@/components/home/ContactSection"));
 
 export default function Home() {
